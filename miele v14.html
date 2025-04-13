@@ -1,0 +1,1441 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Miele Nordics FP&amp;A - Strategic Vision &amp; Action Plan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <style>
+        /* --- Base Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            /* Light Theme Colors */
+            --miele-red: #CC0000;
+            --miele-red-dark: #A30000;
+            --bg-color: #f8f9fa; /* Light grey background */
+            --card-bg-color: #ffffff; /* White card background */
+            --text-primary: #212529; /* Dark primary text */
+            --text-secondary: #6c757d; /* Medium-dark secondary text */
+            --text-highlight: #b30000; /* Darker red highlight for light theme */
+            --border-color: rgba(0, 0, 0, 0.1); /* Light grey border */
+            --chart-grid-color: rgba(0, 0, 0, 0.08); /* Subtle dark grid lines */
+            --positive-color: #198754; /* Adjusted Green for light theme */
+            --negative-color: #dc3545; /* Adjusted Red for light theme */
+            --neutral-color: #ffc107;  /* Amber */
+            /* Cluster Colors */
+            --cluster-1-color: #0d6efd; /* Blue */
+            --cluster-2-color: #ffc107; /* Amber */
+            --cluster-3-color: #198754; /* Green */
+            --cluster-1-bg: rgba(13, 110, 253, 0.1); /* Light Blue transparent */
+            --cluster-2-bg: rgba(255, 193, 7, 0.1);  /* Amber transparent */
+            --cluster-3-bg: rgba(25, 135, 84, 0.1); /* Green transparent */
+            /* Country Colors (Example) */
+            --sweden-color: #dc3545; /* Red */
+            --denmark-color: #ffc107; /* Amber */
+            --norway-color: #198754; /* Green */
+            --finland-color: #0d6efd; /* Blue */
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: var(--bg-color);
+            color: var(--text-primary); /* Default text color */
+            line-height: 1.65;
+            padding-top: 65px;
+        }
+        header {
+            background-color: var(--miele-red);
+            padding: 10px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--miele-red-dark);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            height: 65px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adjusted shadow for light theme */
+        }
+        .logo {
+            color: #ffffff; /* White logo text still works on red header */
+            font-size: 1.9em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        main {
+            max-width: 1250px;
+            margin: 40px auto;
+            padding: 25px;
+            position: relative;
+            min-height: calc(100vh - 160px - 65px); /* Adjust min-height for near full page */
+            overflow-y: auto;
+            display: flex; /* Use flex to help slide fill height */
+            flex-direction: column;
+        }
+
+        /* Slide Styling */
+        .slide {
+            display: none;
+            background-color: var(--card-bg-color);
+            padding: 40px 50px;
+            border-radius: 12px;
+            margin-bottom: 70px; /* Keep margin for spacing between slides conceptually */
+            min-height: 520px; /* Keep min-height */
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Adjusted shadow */
+            flex-grow: 1; /* Allow slide to grow */
+        }
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.6s ease-in-out forwards; /* Apply fade-in to active slide */
+        }
+        /* Landing Page Specific Styles */
+        #slide-0.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: calc(100vh - 65px - 100px); /* Keep specific height */
+            padding-top: 5vh;
+            padding-bottom: 5vh;
+            background-color: var(--bg-color); /* Match body background */
+            border: none;
+            box-shadow: none;
+            animation: none; /* Override general slide fade-in for custom element animations */
+            flex-grow: 0; /* Don't force landing page to fill height */
+        }
+        #slide-0 h1 {
+            font-size: 3.2em;
+            color: var(--text-primary); /* Dark text */
+            border-bottom: 5px solid var(--miele-red);
+            padding-bottom: 18px;
+            margin-bottom: 35px;
+             /* Animation */
+            opacity: 0; /* Start hidden */
+            animation: subtleFadeInUp 0.8s ease-out 0.1s forwards;
+        }
+        #slide-0 p { /* Target name */
+            font-size: 1.5em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+             /* Animation */
+            opacity: 0; /* Start hidden */
+            animation: subtleFadeInUp 0.8s ease-out 0.3s forwards;
+        }
+         #slide-0 .subtitle { /* New subtitle style */
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+             /* Animation */
+            opacity: 0; /* Start hidden */
+            animation: subtleFadeInUp 0.8s ease-out 0.5s forwards;
+        }
+        #slide-0 .date {
+            font-size: 1.15em;
+            color: var(--text-secondary);
+            margin-top: 25px;
+             /* Animation */
+            opacity: 0; /* Start hidden */
+            animation: subtleFadeInUp 0.8s ease-out 0.7s forwards;
+        }
+
+        /* General Slide Content Styles */
+        .slide h2 {
+            color: var(--text-primary); /* Dark text */
+            font-size: 2.4em;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 4px solid var(--miele-red);
+            padding-bottom: 10px;
+            display: inline-block;
+            align-self: flex-start;
+        }
+        .slide h3 {
+            color: var(--text-primary); /* Dark text */
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 400;
+            opacity: 0.9; /* Slightly less opacity */
+            align-self: flex-start;
+        }
+        .slide > p {
+            font-size: 1.1em;
+            margin-bottom: 18px;
+            color: var(--text-primary);
+            max-width: 98%;
+            align-self: flex-start;
+        }
+        .slide ul {
+            list-style-position: outside; /* Use outside for nested lists */
+            padding-left: 25px; /* Standard padding */
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .slide ul li {
+            font-size: 1.1em;
+            margin-bottom: 12px; /* Slightly reduced margin */
+            color: var(--text-primary);
+        }
+         /* Nested list styling */
+        .slide ul ul {
+            padding-left: 30px; /* Indent nested lists */
+            margin-top: 8px; /* Space above nested list */
+            margin-bottom: 10px; /* Space below nested list */
+        }
+        .slide ul ul li {
+            font-size: 1.0em; /* Slightly smaller font for sub-items */
+            margin-bottom: 8px; /* Reduced margin for sub-items */
+        }
+         /* Specific style for top-level agenda items */
+        #slide-1 > ul > li {
+            font-weight: 500; /* Make top-level items slightly bolder */
+            font-size: 1.15em;
+            margin-bottom: 18px; /* More space between main points */
+            list-style-type: upper-roman; /* Use Roman numerals for main points */
+        }
+        #slide-1 > ul > li > ul { /* Style the first level of nesting */
+             list-style-type: disc; /* Use standard bullets */
+        }
+
+
+        .slide strong {
+            color: var(--text-highlight); /* Use dark red highlight */
+            font-weight: 600;
+        }
+        .assumption {
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            margin-top: -12px;
+            margin-bottom: 18px;
+            align-self: flex-start;
+            background: rgba(0,0,0,0.03); /* Very subtle dark background */
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* --- Executive Summary Box --- */
+        .executive-summary {
+            background-color: #e9ecef; /* Lighter grey background */
+            border-left: 5px solid var(--text-highlight); /* Dark red highlight border */
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 1.05em;
+            color: var(--text-primary);
+            border-radius: 0 5px 5px 0;
+            align-self: stretch;
+        }
+         .executive-summary a {
+            color: var(--text-highlight);
+            text-decoration: none;
+        }
+        .executive-summary a:hover { text-decoration: underline; }
+        .executive-summary strong { color: var(--text-highlight); }
+
+        /* Layout Helpers */
+        .flex-container {
+            display: flex;
+            gap: 20px; /* Adjusted gap */
+            margin-top: 20px;
+            flex-wrap: wrap;
+            align-items: stretch; /* Keep stretch for initial alignment */
+            width: 100%;
+            flex-grow: 1;
+        }
+        .flex-item { flex: 1; display: flex; flex-direction: column; min-width: 180px; /* Adjusted min-width for 4 cards */ }
+        .flex-item.quarter { flex-basis: calc(25% - 15px); } /* Adjusted for 4 cards and gap */
+        .flex-item.half { flex-basis: calc(50% - 15px); } /* Adjusted for gap */
+        .flex-item.third { flex-basis: calc(33.333% - 14px); display: flex; flex-direction: column; } /* Ensure flex column for third */
+
+        /* Chart Container & Wrapper */
+        .chart-container { /* General container for charts not in specific cards */
+            position: relative;
+            width: 100%;
+            margin: 15px auto;
+            background: rgba(0,0,0,0.02);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .chart-container.small { max-width: 100%; height: 300px; }
+        .chart-container.medium { max-width: 100%; height: 340px; }
+        .chart-container.large { max-width: 100%; height: 400px; } /* Added large size */
+        .chart-container.bubble-container { max-width: 100%; height: 320px; margin-top: 20px; }
+
+        .chart-wrapper { /* Specific wrapper for charts in cards (e.g., slide 3, slide 7) */
+             position: relative;
+             width: 100%;
+             margin-top: 10px;
+             flex-grow: 1;
+             min-height: 150px; /* Ensure minimum height */
+        }
+        /* Style for chart labels above charts (e.g., slide 7) */
+        .chart-label {
+             font-size: 1.1em;
+             color: var(--text-highlight); /* Dark red highlight */
+             margin-bottom: 10px; /* Space below label */
+             font-weight: 500;
+        }
+
+        canvas { display: block; width: 100% !important; height: 100% !important; }
+
+        /* Card Styles (KPI, Macro, Country) - Refined */
+        .kpi-card { /* Used for metrics comparison on slide 5 */
+            background-color: #ffffff; padding: 15px; border-radius: 8px; text-align: center;
+            margin-bottom: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Added transition */
+        }
+        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 3px 8px rgba(0,0,0,0.08); }
+        .kpi-value { font-size: 1.8em; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 5px;} /* Slightly larger */
+        .kpi-label { font-size: 0.9em; color: var(--text-secondary); }
+        .kpi-comparison { font-size: 0.9em; display: block; margin-top: 6px; font-weight: 500;}
+        .kpi-comparison.positive { color: var(--positive-color); }
+        .kpi-comparison.negative { color: var(--negative-color); }
+        .kpi-comparison.neutral { color: var(--neutral-color); }
+        .kpi-card .year-label { font-size: 0.8em; color: var(--text-secondary); font-weight: bold; margin-bottom: 8px; text-transform: uppercase; } /* Year label */
+
+
+        .macro-card { /* Used in slide 3 */
+            flex: 1 1 calc(50% - 10px); /* Adjusted basis for gap */ background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 2px 5px rgba(0,0,0,0.08); display: flex; flex-direction: column; margin-bottom: 20px;
+        }
+        .macro-card h4 { font-size: 1.2em; /* Adjusted size */ color: var(--text-primary); margin-bottom: 12px; border-bottom: 1px solid var(--miele-red); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .macro-trend { font-size: 1.2em; /* Adjusted size */ }
+        .macro-card .chart-wrapper { height: 150px; }
+        .macro-card p { margin: 0 0 10px; font-size: 0.9em; /* Adjusted size */ color: var(--text-secondary); line-height: 1.5; }
+        .macro-card small { color: var(--text-secondary); display: block; margin-top: 10px; text-align: right; font-size: 0.85em; }
+
+        .country-card { /* Used in slide 2 */
+            background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; flex-grow: 1; display: flex; flex-direction: column; box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        .country-card h4 { color: var(--text-primary); font-size: 1.3em; margin-bottom: 10px; display: flex; align-items: center; border-bottom: 1px solid var(--miele-red); padding-bottom: 6px; }
+        .flag { width: 25px; height: auto; margin-right: 10px; flex-shrink: 0; border: 1px solid #eee; }
+        .country-card .meta-info { font-size: 0.9em; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4; }
+        .country-card .data-points { list-style: none; padding: 0; margin: 0 0 10px 0; } /* Container for data points */
+        .country-card .data-point { font-size: 0.9em; color: var(--text-primary); margin-bottom: 6px; display: flex; flex-wrap: wrap; align-items: center; } /* Allow wrap */
+        .country-card .data-point .label { color: var(--text-secondary); font-weight: 500; min-width: 75px; /* Adjusted width */ display: inline-block; margin-right: 5px; }
+        .country-card .data-point .value { font-weight: 500; margin-right: 3px; }
+        .country-card .data-point .trend { font-size: 0.9em; margin-right: 3px; }
+        .country-card .data-point .comparison { font-size: 0.85em; color: var(--text-secondary); white-space: nowrap; } /* Prevent wrap */
+        .country-card .expectation { font-size: 0.9em; font-style: italic; color: var(--text-secondary); margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 8px; }
+
+
+        /* Collapsible Challenge Card Styles - Refined */
+         /* Visual Summary for Challenges */
+        .challenge-summary {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .summary-item {
+            font-size: 0.95em;
+            font-weight: 500;
+            padding: 0 10px; /* Add padding */
+        }
+        .summary-item span {
+            display: block;
+            font-size: 1.8em; /* Icon size */
+            margin-bottom: 5px;
+        }
+        .summary-item .c1 { color: var(--cluster-1-color); }
+        .summary-item .c2 { color: var(--cluster-2-color); }
+        .summary-item .c3 { color: var(--cluster-3-color); }
+
+        .collapsible-card {
+             border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 25px; overflow: hidden; transition: box-shadow 0.3s ease;
+             flex-grow: 1; display: flex; flex-direction: column; /* Added for alignment */
+        }
+        /* Apply specific background colors */
+        .collapsible-card.cluster-1 { background-color: var(--cluster-1-bg); }
+        .collapsible-card.cluster-2 { background-color: var(--cluster-2-bg); }
+        .collapsible-card.cluster-3 { background-color: var(--cluster-3-bg); }
+
+        .collapsible-card:hover { box-shadow: 0 0 15px rgba(204, 0, 0, 0.15); }
+        .card-header { background-color: rgba(0,0,0,0.05); padding: 18px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
+        .card-header:hover { background-color: rgba(0,0,0,0.08); }
+        .card-header h4 { color: var(--text-primary); font-size: 1.3em; margin: 0; font-weight: 600; }
+        .card-header .toggle-icon { font-size: 1.6em; color: var(--text-secondary); transition: transform 0.3s ease; }
+        .collapsible-card.expanded .card-header .toggle-icon { transform: rotate(180deg); }
+        .card-content {
+            padding: 0 25px; max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; color: var(--text-primary); font-size: 1em;
+            background-color: transparent; /* Make content background transparent */
+            flex-grow: 1; /* Allow content to grow */
+        }
+        .collapsible-card.expanded .card-content { max-height: 1000px; padding: 20px 25px 25px; }
+        .card-content ul { margin-top: 10px; margin-bottom: 12px; padding-left: 18px; list-style-type: disc; list-style-position: outside; } /* Added margin-top */
+        .card-content ul li { font-size: 1.0em; margin-bottom: 8px; line-height: 1.5; } /* Adjusted font size */
+        .card-content ul li strong { color: var(--text-primary); font-weight: 600; }
+        .card-content .insight-label { color: var(--text-highlight); font-size: 1.05em; margin-top: 18px; margin-bottom: 8px; font-weight: 600; display: block; }
+        /* Styles for mini charts inside challenge cards */
+        .mini-chart-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap; /* Allow wrapping if needed */
+            align-items: center;
+            justify-content: space-around; /* Distribute space */
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .mini-chart-wrapper {
+            position: relative;
+            height: 100px; /* Fixed height for mini charts */
+            flex: 1; /* Allow charts to take space */
+            min-width: 120px; /* Minimum width */
+            max-width: 150px; /* Maximum width */
+        }
+         .mini-kpi {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .mini-kpi-value {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--negative-color); /* Default to negative, override if needed */
+        }
+         .mini-kpi-value.positive { color: var(--positive-color); }
+         .mini-kpi-value.neutral { color: var(--neutral-color); }
+        .mini-kpi-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+
+        /* Timeline Style - Refined */
+        .timeline { list-style: none; padding: 0; position: relative; width: 100%; margin-top: 20px; }
+        .timeline::before { content: ''; position: absolute; top: 5px; bottom: 5px; width: 3px; background: var(--miele-red); left: 20px; border-radius: 2px; }
+        .timeline li { margin-bottom: 25px; padding-left: 50px; position: relative; }
+        .timeline li::before { content: ''; position: absolute; left: 12px; top: 6px; width: 18px; height: 18px; background: var(--miele-red); border-radius: 50%; border: 3px solid var(--card-bg-color);}
+        .timeline h4 { font-size: 1.2em; color: var(--text-primary); margin-bottom: 8px; }
+        .timeline p { font-size: 1.05em; color: var(--text-primary); margin-bottom: 0; max-width: 100%;}
+
+        /* --- Progress Bar --- */
+        .progress-indicator { padding: 0 20px; margin-top: 10px; margin-bottom: -5px; display: flex; align-items: center; gap: 15px; }
+        .progress-text { font-size: 0.9em; color: var(--text-secondary); white-space: nowrap; }
+        .progress-container { flex-grow: 1; height: 8px; background-color: rgba(0, 0, 0, 0.1); border-radius: 4px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background-color: var(--miele-red); border-radius: 4px; transition: width 0.4s ease-out; }
+
+        /* Navigation Buttons (Bottom) - Refined */
+        .navigation { display: flex; justify-content: space-between; padding: 0 20px; margin-top: 15px; position: sticky; bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px 30px; border-radius: 10px; backdrop-filter: blur(6px); z-index: 999; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); border-top: 1px solid var(--border-color); }
+        .nav-button { background-color: var(--miele-red); color: white; border: none; padding: 14px 28px; font-size: 1.05em; border-radius: 6px; cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease; font-weight: 500; letter-spacing: 0.5px; }
+        .nav-button:hover { background-color: var(--miele-red-dark); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav-button:active { transform: scale(0.97); }
+        .nav-button:disabled { background-color: #adb5bd; color: #6c757d; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
+
+        /* Side Menu Styles - Refined */
+        #menu-toggle { background-color: transparent; color: white; border: 1px solid white; padding: 9px 14px; font-size: 1.1em; border-radius: 6px; cursor: pointer; transition: background-color 0.3s ease, border-color 0.3s ease; z-index: 1001; }
+        #menu-toggle:hover { background-color: var(--miele-red-dark); border-color: var(--miele-red-dark); }
+        #slide-menu { position: fixed; top: 65px; left: 0; width: 300px; height: calc(100vh - 65px); background-color: rgba(248, 249, 250, 0.98); backdrop-filter: blur(8px); border-right: 1px solid var(--border-color); transform: translateX(-100%); transition: transform 0.4s ease-in-out; z-index: 1050; overflow-y: auto; padding-top: 20px; box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1); }
+        #slide-menu.menu-open { transform: translateX(0); }
+        #slide-menu ul { list-style: none; padding: 0; margin: 0; }
+        #slide-menu li button { display: block; width: 100%; background: none; border: none; color: var(--text-primary); padding: 14px 25px; text-align: left; font-size: 1em; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; border-bottom: 1px solid var(--border-color); }
+        #slide-menu li button:hover { background-color: rgba(204, 0, 0, 0.1); color: var(--miele-red); }
+        #slide-menu li button.active-menu-item { background-color: rgba(204, 0, 0, 0.2); font-weight: bold; color: var(--miele-red); }
+
+        /* --- Filter Buttons (Slide 3) --- */
+        .filter-controls { display: flex; justify-content: center; gap: 10px; /* Reduced gap */ margin-bottom: 25px; flex-wrap: wrap; }
+        .filter-btn { background-color: #e9ecef; color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; font-size: 0.9em; /* Slightly smaller */ }
+        .filter-btn:hover { background-color: #dee2e6; border-color: #adb5bd; }
+        .filter-btn.active { background-color: var(--miele-red); border-color: var(--miele-red-dark); color: #ffffff; }
+        .filter-btn.compare-all { background-color: var(--text-secondary); color: white; } /* Style for compare button */
+        .filter-btn.compare-all:hover { background-color: #5a6268; }
+
+
+        /* Animation */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } /* Simplified fade-in */
+        @keyframes subtleFadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Appendix specific style */
+        #slide-15 ul { list-style-type: disc; padding-left: 30px; }
+        #slide-15 li { font-size: 1.05em; margin-bottom: 12px; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <button id="menu-toggle">☰ Menu</button>
+        <div class="logo">Miele Nordics</div>
+    </header>
+
+    <nav id="slide-menu">
+        <ul id="menu-list"></ul>
+    </nav>
+
+    <main id="slides-container">
+
+        <section class="slide" id="slide-0">
+            <h1>Miele Situational Analysis</h1>
+            <p>Joao Caldas</p>
+            <p class="subtitle">Business Case Presentation – April 2025</p>
+            <p class="date">April 2025</p>
+        </section>
+
+        <section class="slide" id="slide-1">
+            <h2>Presentation Agenda</h2>
+            <h3>Navigating Towards Profitable Growth</h3>
+             <ul>
+                <li>
+                    External Environment Analysis
+                    <ul>
+                        <li>Nordic Macroeconomic Landscape (2021-25)</li>
+                        <li>Nordic Market Priorities & Characteristics</li>
+                    </ul>
+                </li>
+                <li>
+                    Miele Nordics - Current State Assessment
+                    <ul>
+                        <li>Core Challenge Clusters</li>
+                        <li>Financial Health Check (P&L) - YoY Analysis</li>
+                        <li>Portfolio Mix & Growth Performance</li>
+                        <li>Sales Channel Mix & Profitability</li>
+                        <li>Operational Efficiency & Service Performance</li>
+                        <li>People, Culture & Work Environment</li>
+                    </ul>
+                </li>
+                <li>
+                    Strategic Recommendations & Action Plan
+                    <ul>
+                        <li>Strategic Levers to Unlock Potential</li>
+                        <li>Action Plan: Business Performance & People</li>
+                        <li>Illustrative Financial Uplift</li>
+                    </ul>
+                </li>
+                 <li>
+                    Conclusion & Next Steps
+                    <ul>
+                        <li>Summary & Call to Action</li>
+                        <li>Proposed Next Steps & Appendix</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="slide-2">
+            <h2>Nordic Market Focus &amp; Priorities</h2>
+            <h3>Tailoring Strategy to Key Country Characteristics</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Strategy must be nuanced. **Priority markets: Sweden** (largest size, strong premium focus) & **Norway** (highest GDPpc, quality demand). **Secondary markets: Denmark** (more price-conscious despite good GDPpc) & **Finland** (cautious consumers, lower GDPpc).
+            </div>
+            <p>Key indicators and strategic focus points per country (Data: Q1 2025 / 2025F):</p>
+            <div class="flex-container">
+                 <div class="flex-item quarter"><div class="country-card"><h4><img alt="Swedish Flag" class="flag" src="https://flagcdn.com/w40/se.png" onerror="this.src='https://placehold.co/40x27/cccccc/ffffff?text=SE'"/>Sweden (Priority)</h4>
+                    <p class="meta-info">Pop: ~10.6M | GDPpc: ~$70k | 25F Growth: ~2.0%</p>
+                    <div class="data-points">
+                        <span class="data-point"><span class="label">Inflation:</span><span class="value"> ~2.8% <span class="trend" style="color: var(--negative-color)">▲</span></span> <span class="comparison">(+0.2pp)</span></span>
+                        <span class="data-point"><span class="label">Unemploy.:</span><span class="value"> ~8.2% <span class="trend" style="color: var(--neutral-color)">↔</span></span> <span class="comparison">(+0.0pp)</span></span>
+                        <span class="data-point"><span class="label">FX (SEK):</span><span class="value"> Stabilizing</span></span>
+                        <span class="data-point"><span class="label">Focus:</span><span class="value"> <strong>Sustainability, Smart Tech</strong></span></span>
+                    </div>
+                     <p class="expectation">Largest market size + strong tech/sustainability focus = Key growth engine.</p>
+                </div></div>
+                 <div class="flex-item quarter"><div class="country-card"><h4><img alt="Norwegian Flag" class="flag" src="https://flagcdn.com/w40/no.png" onerror="this.src='https://placehold.co/40x30/cccccc/ffffff?text=NO'"/>Norway (Priority)</h4>
+                     <p class="meta-info">Pop: ~5.6M | GDPpc: ~$104k | 25F Growth: ~1.5%</p>
+                     <div class="data-points">
+                        <span class="data-point"><span class="label">Inflation:</span><span class="value"> ~3.3% <span class="trend" style="color: var(--positive-color)">▼</span></span> <span class="comparison">(-1.1pp)</span></span>
+                        <span class="data-point"><span class="label">Unemploy.:</span><span class="value"> ~3.9% <span class="trend" style="color: var(--positive-color)">▼</span></span> <span class="comparison">(-0.1pp)</span></span>
+                        <span class="data-point"><span class="label">FX (NOK):</span><span class="value"> Stabilizing</span></span>
+                        <span class="data-point"><span class="label">Focus:</span><span class="value"> <strong>Quality, Premium Offerings</strong></span></span>
+                    </div>
+                     <p class="expectation">Highest purchasing power + quality focus = Ideal for high-end Miele positioning.</p>
+                </div></div>
+                 <div class="flex-item quarter"><div class="country-card"><h4><img alt="Danish Flag" class="flag" src="https://flagcdn.com/w40/dk.png" onerror="this.src='https://placehold.co/40x30/cccccc/ffffff?text=DK'"/>Denmark (Secondary)</h4>
+                    <p class="meta-info">Pop: ~6.0M | GDPpc: ~$77k | 25F Growth: ~1.7%</p>
+                     <div class="data-points">
+                        <span class="data-point"><span class="label">Inflation:</span><span class="value"> ~2.0% <span class="trend" style="color: var(--negative-color)">▲</span></span> <span class="comparison">(+1.4pp)</span></span>
+                        <span class="data-point"><span class="label">Unemploy.:</span><span class="value"> ~5.7% <span class="trend" style="color: var(--positive-color)">▼</span></span> <span class="comparison">(-0.1pp)</span></span>
+                        <span class="data-point"><span class="label">FX (DKK):</span><span class="value"> Pegged</span></span>
+                        <span class="data-point"><span class="label">Focus:</span><span class="value"> <strong>Value Messaging, Direct</strong></span></span>
+                    </div>
+                     <p class="expectation">Good potential but higher price sensitivity requires targeted value comms.</p>
+                </div></div>
+                 <div class="flex-item quarter"><div class="country-card"><h4><img alt="Finnish Flag" class="flag" src="https://flagcdn.com/w40/fi.png" onerror="this.src='https://placehold.co/40x24/cccccc/ffffff?text=FI'"/>Finland (Secondary)</h4>
+                    <p class="meta-info">Pop: ~5.6M | GDPpc: ~$65k | 25F Growth: ~1.5%</p>
+                     <div class="data-points">
+                        <span class="data-point"><span class="label">Inflation:</span><span class="value"> ~1.5% <span class="trend" style="color: var(--negative-color)">▲</span></span> <span class="comparison">(+0.4pp)</span></span>
+                        <span class="data-point"><span class="label">Unemploy.:</span><span class="value"> ~8.8% <span class="trend" style="color: var(--negative-color)">▲</span></span> <span class="comparison">(+0.9pp)</span></span>
+                        <span class="data-point"><span class="label">FX (EUR):</span><span class="value"> N/A</span></span>
+                        <span class="data-point"><span class="label">Focus:</span><span class="value"> <strong>Trust, Longevity, Efficiency</strong></span></span>
+                    </div>
+                     <p class="expectation">More cautious market; focus on durability and efficiency messaging.</p>
+                </div></div>
+            </div>
+             <div class="chart-container medium" style="margin-top: 30px;">
+                <h4 class="chart-label" style="text-align: center; margin-bottom: 15px;">Nordic Market Positioning (2025F Growth vs. GDP per Capita)</h4>
+                <div class="chart-wrapper" style="height: 280px;">
+                    <canvas id="marketComparisonChart"></canvas>
+                </div>
+                <p class="assumption" style="text-align: center; margin-top: 5px;">Bubble size represents population. GDP per Capita (PPP, 2023 WB Est.) used as proxy for premium potential.</p>
+            </div>
+        </section>
+
+        <section class="slide" id="slide-3">
+            <h2>Nordics Macroeconomic Landscape (2021–2025)</h2>
+            <h3>Key Trends Impacting Consumer Behavior & Business</h3>
+
+             <div class="filter-controls">
+                <button class="filter-btn active" data-country="Sweden">Sweden</button>
+                <button class="filter-btn" data-country="Denmark">Denmark</button>
+                <button class="filter-btn" data-country="Norway">Norway</button>
+                <button class="filter-btn" data-country="Finland">Finland</button>
+                <button class="filter-btn compare-all" id="compareAllBtn" style="margin-left: 15px;">Compare All</button> </div>
+
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> High inflation, economic slowdown, and FX volatility have challenged growth. Recovery is fragile, requiring strategic resilience and consumer-centric positioning.
+                <br /><br />
+                <small>Source: <a href="https://ec.europa.eu/eurostat/" target="_blank" rel="noopener noreferrer">Eurostat</a>, <a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener noreferrer">IMF WEO</a>, <a href="https://www.nordicstatistics.org/" target="_blank" rel="noopener noreferrer">Nordic Statistics DB</a></small>
+            </div>
+
+            <div class="flex-container">
+                <div class="macro-card">
+                    <h4><span class="macro-trend down">▼</span> Inflation</h4>
+                    <p>From highs of 6.1% in 2023 to a forecasted 2.3% in 2025, inflation in the Nordics is normalizing.<br /><em>Source: Eurostat, March 2025</em></p>
+                    <div class="chart-wrapper"> <canvas id='inflationChart'></canvas> </div>
+                </div>
+                <div class="macro-card">
+                    <h4><span class="macro-trend up">▲</span> GDP Growth</h4>
+                    <p>2025 is expected to bring moderate GDP growth across the Nordics, led by Norway and Denmark. <br /><em>Source: IMF World Economic Outlook, April 2024</em></p>
+                     <div class="chart-wrapper"> <canvas id='gdpChart'></canvas> </div>
+                </div>
+                <div class="macro-card">
+                    <h4><span class="macro-trend stable">↔</span> Consumer Confidence</h4>
+                    <p>Confidence is rising steadily, with Sweden and Denmark expected to reach near-2019 optimism levels.<br /><em>Source: European Commission, Q1 2025</em></p>
+                     <div class="chart-wrapper"> <canvas id='confidenceChart'></canvas> </div>
+                </div>
+                <div class="macro-card">
+                    <h4><span class="macro-trend stable">↔</span> FX Volatility</h4>
+                    <p>Currency movements (SEK/NOK vs EUR) are stabilizing off 2023 lows, but past weakness significantly impacted import costs & margins.<br /><em>Source: ECB & Nordea, Q1 2025</em></p> <div class="chart-wrapper"> <canvas id="fxEvolutionChart"></canvas> </div>
+                    <small>Source: ECB, Nordea Markets – FX spot averages by quarter</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" id="slide-4">
+            <h2>Challenges Clustering</h2>
+            <h3>Identifying Core Themes from the Assessment</h3>
+             <div class="challenge-summary">
+                 <div class="summary-item"><span class="c1">🔵</span>Strategic Focus</div>
+                 <div class="summary-item"><span class="c2">🟡</span>Investment Pillars</div>
+                 <div class="summary-item"><span class="c3">🟢</span>People & Culture</div>
+            </div>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Three core, interlinked challenge areas: 1) Misaligned strategy (portfolio/channel), 2) Need for targeted investment (OVH, Mktg, G2N, Aftersales), and 3) Weak people/culture foundation (engagement/rewards/environment). Addressing these holistically is key.
+            </div>
+            <div class="flex-container">
+                <div class="flex-item third">
+                    <div class="collapsible-card cluster-1 expanded"> <div class="card-header"><h4>🔵 Cluster 1: Strategic Focus &amp; Market Alignment</h4><span class="toggle-icon">▼</span></div>
+                        <div class="card-content">
+                            <p><strong>Problem:</strong> Growth lagging market; misaligned portfolio &amp; channels.</p>
+                            <p><strong>Evidence & Opportunity:</strong></p>
+                            <div class="mini-chart-container">
+                                <div class="mini-chart-wrapper" style="height: 120px;">
+                                     <canvas id="strategyMixChart"></canvas>
+                                     <div class="mini-kpi-label" style="text-align: center; margin-top: 5px;">Product Mix (% NS)</div>
+                                </div>
+                                <div class="mini-chart-wrapper" style="height: 120px;">
+                                     <canvas id="strategyChannelChart"></canvas>
+                                      <div class="mini-kpi-label" style="text-align: center; margin-top: 5px;">Channel Mix (% NS)</div>
+                                </div>
+                            </div>
+                            <p><strong>Need:</strong> Reposition towards <strong>premium, higher-margin segments:</strong></p>
+                            <ul>
+                                <li>Grow Cooking share (esp. in priority markets SE/NO).</li>
+                                <li>Shift focus to Kitchen Studios & Direct channels.</li>
+                                <li>Implement targeted country x category promotions.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-item third">
+                     <div class="collapsible-card cluster-2">
+                        <div class="card-header"><h4>🟡 Cluster 2: Big Investment Pillars</h4><span class="toggle-icon">▼</span></div>
+                        <div class="card-content">
+                            <p><strong>Problem:</strong> Profitability hampered by cost structure & loss-making service.</p>
+                            <p><strong>Opportunity Areas:</strong></p>
+                            <ul>
+                                <li>Overhead (OVH) Optimization</li>
+                                <li>Marketing ROI Improvement</li>
+                                <li>Gross-to-Net (G2N) Discipline</li>
+                                <li>Aftersales Turnaround (see trend ↓)</li>
+                            </ul>
+                             <div class="mini-chart-container" style="justify-content: center;">
+                                 <div class="mini-chart-wrapper" style="height: 120px; max-width: 200px;">
+                                     <canvas id="aftersalesTrendChart"></canvas>
+                                     <div class="mini-kpi-label" style="text-align: center; margin-top: 5px;">Aftersales P/L Trend (k€)</div>
+                                </div>
+                            </div>
+                            <p><strong>Need:</strong> Targeted investment & efficiency drives in key areas to improve margins and turn Aftersales profitable.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-item third">
+                     <div class="collapsible-card cluster-3">
+                        <div class="card-header"><h4>🟢 Cluster 3: People, Culture &amp; Enabling Environment</h4><span class="toggle-icon">▼</span></div>
+                        <div class="card-content">
+                            <p><strong>Problem:</strong> Disengaged workforce &amp; weak performance culture hinder growth.</p>
+                            <p><strong>Evidence:</strong></p>
+                             <div class="mini-chart-container">
+                                 <div class="mini-kpi">
+                                    <div class="mini-kpi-value">-20/30%</div>
+                                    <div class="mini-kpi-label">Salary vs Market</div>
+                                </div>
+                                 <div class="mini-kpi">
+                                    <div class="mini-kpi-value neutral">~20%</div>
+                                    <div class="mini-kpi-label">Bonus Participation</div>
+                                </div>
+                                 <div class="mini-kpi">
+                                    <div class="mini-kpi-value">Low</div>
+                                    <div class="mini-kpi-label">Engagement Score</div>
+                                </div>
+                            </div>
+                             <p>Weak leadership/development feedback, potentially unsuitable premises.</p>
+                            <p><strong>Need:</strong> Modernize leadership &amp; motivation, implement fair &amp; competitive rewards, create an <strong>enabling physical &amp; cultural environment</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" id="slide-5">
+            <h2>Financial Health Check: Profitability Bridge 2023-2024</h2>
+            <h3>Understanding the Operating Profit Decline Despite Sales Growth</h3>
+            <div class="executive-summary">
+                <strong>Key Story:</strong> Despite +5% Net Sales growth, 2024 Operating Profit dropped to €40k (from ~€99k Est. 2023). Positive volume impact (+€171k) was more than offset by unfavorable channel/product mix (-€180k), Service P/L swing (-€150k), partially mitigated by Marketing savings (+€200k).
+            </div>
+
+            <h3 style="font-size: 1.2em; text-align: center; margin-bottom: 15px;">2024 Actual Performance Highlights</h3>
+            <div class="flex-container" style="gap: 15px; margin-bottom: 30px; align-items: flex-start;">
+                 <div class="flex-item quarter"><div class="kpi-card"> <span class="kpi-value">€10.0M</span> <span class="kpi-label">Net Sales</span> <span class="kpi-comparison positive">+5.0% vs PY</span></div></div>
+                 <div class="flex-item quarter"><div class="kpi-card"> <span class="kpi-value">34.2%</span> <span class="kpi-label">Gross Margin %</span> <span class="kpi-comparison negative">-1.8pp vs PY</span></div></div>
+                 <div class="flex-item quarter"><div class="kpi-card"> <span class="kpi-value">€3.38M</span> <span class="kpi-label">Total OPEX</span> <span class="kpi-comparison negative">33.8% of NS</span></div></div>
+                 <div class="flex-item quarter"><div class="kpi-card"> <span class="kpi-value">€40k</span> <span class="kpi-label">Operating Profit</span> <span class="kpi-comparison negative">-€59k vs PY Est.</span></div></div>
+            </div>
+             <p class="assumption" style="text-align: center; margin-top: -20px; margin-bottom: 20px;">2023 Est. OP: €99k (based on 36% GP & €0 Service P/L).</p>
+
+            <div class="chart-container large">
+                <canvas id="profitBridgeChart"></canvas>
+            </div>
+            <p style="text-align: center; margin-top: 10px;">Addressing these negative drivers (Mix, Service) and optimizing costs (Marketing, Other OPEX) forms the basis for the potential uplift scenario (Slide 13).</p> </section>
+
+        <section class="slide" id="slide-6">
+            <h2>Growth Lag &amp; Unbalanced Portfolio (Cluster 1)</h2>
+            <h3>Missing Market Momentum &amp; Laundry Dependence</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Sales growth lags the market, heavily reliant on lower-margin Laundry (~60%). High-margin Cooking (~15%) represents a significant untapped opportunity requiring strategic focus.
+            </div>
+            <div class="flex-container">
+                <div class="flex-item half">
+                    <p>As highlighted in Cluster 1, turnover growth has not kept pace with the market (*Assumption: Market grew ~5%, Miele grew ~2%*).</p>
+                    <p>The sales mix is heavily skewed towards <strong>Laundry (approx. 60%)</strong>, likely facing margin pressure, while the potentially high-margin <strong>Cooking segment (approx. 15%)</strong> is underdeveloped relative to its potential.</p>
+                    <p class="assumption">Assumption: Laundry ~60%, Cooking ~15%, Other ~25% of Net Sales.</p>
+                </div>
+                <div class="flex-item half">
+                    <div class="chart-container small" style="height: 320px;"> <canvas id="productMixChart"></canvas> </div>
+                </div>
+            </div>
+            <p style="margin-top: 20px;"><strong>Strategic Imperative:</strong> Rebalance portfolio towards higher-margin Cooking, aligning with market opportunities and premium positioning.</p>
+        </section>
+
+        <section class="slide" id="slide-7">
+            <h2>Channel Mix & Margin Variance</h2>
+            <h3>Strategic Channel Positioning for Profit Optimization</h3>
+            <div class="executive-summary">
+                <strong>Key Message:</strong> ERT dominates volume but drags margin. To unlock profit: grow Direct and Kitchen Studios, improve ERT terms, and fix Service losses.
+            </div>
+            <div class="flex-container" style="margin-top: 40px;">
+                <div class="flex-item">
+                    <h4 class="chart-label">Profitability Bubble – GM% vs Sales Share</h4>
+                    <div class="chart-wrapper" style="height: 300px;">
+                         <canvas id="channelBubbleChart"></canvas>
+                    </div>
+                </div>
+                <div class="flex-item">
+                    <h4 class="chart-label">Channel Shift Uplift Potential</h4>
+                     <div class="chart-wrapper" style="height: 300px;">
+                        <canvas id="channelShiftChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 25px;"><strong>Call to Action:</strong> Shift 10pp share from ERT to Direct & KS = +€100k margin uplift. Fix Service model. Prioritize mix shift as immediate profit lever.</p>
+        </section>
+
+        <section class="slide" id="slide-8">
+            <h2>Efficiency Gaps: People &amp; Service (Cluster 2)</h2>
+            <h3>Doing More With Less &amp; Fixing the Service Loss</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Significant operational issues exist. Net Sales/FTE is low (benchmark ~20% higher), indicating productivity challenges possibly linked to outdated premises. The Service department's -€120k loss is a major profit drain needing immediate turnaround.
+            </div>
+            <div class="flex-container">
+                <div class="flex-item half">
+                    <div class="kpi-card" style="margin-bottom: 25px;"><span class="kpi-value">Low</span><span class="kpi-label">Net Sales per FTE</span><span class="kpi-comparison negative">Below Benchmark (~ -20%)</span></div>
+                    <p>Low NS/FTE (*Assumption: Benchmark is ~20% higher*) points to productivity issues (Cluster 2). This needs investigation - process, tools, skills?</p>
+                    <p>Outdated premises mentioned in the case (Cluster 2 &amp; 3 link) likely hinder collaboration and efficiency.</p>
+                </div>
+                <div class="flex-item half">
+                    <div class="kpi-card" style="margin-bottom: 25px;"><span class="kpi-value">-€120k</span><span class="kpi-label">Service Department P/L (ACT 2024)</span><span class="kpi-comparison negative">Major Profit Drain</span></div>
+                    <p>The Service loss is a significant drag, contrasting with profitable service models often seen as value-add (Cluster 2).</p>
+                    <p><strong>Hidden Profit Pool:</strong> Turning Service profitable via pricing, efficiency, and potentially value-added offerings is critical.</p>
+                </div>
+            </div>
+            <div class="chart-container medium" style="margin-top: 25px;"><canvas height="300" id="serviceTurnaroundRadar" width="600"></canvas></div>
+            <p class="assumption" style="margin-top: 15px;">Radar chart illustrates current estimated state vs. potential benchmark targets.</p>
+        </section>
+
+        <section class="slide" id="slide-9">
+            <h2>Engagement &amp; Talent Retention Risk (Cluster 3)</h2>
+            <h3>Addressing Leadership, Development &amp; Compensation Gaps</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> People &amp; Culture issues (Cluster 3) pose a major risk. Significantly below-market salaries (-20/30%), subjective/limited bonuses (~20% participation), and perceived weaknesses in leadership/development drive low engagement and hinder performance.
+            </div>
+            <div class="flex-container">
+                <div class="flex-item half">
+                    <p>Issues from Cluster 3 are evident in Engagement Survey insights:</p>
+                    <ul>
+                        <li><strong>Salaries:</strong> Significantly below market benchmarks (reported as <strong>-20% to -30%</strong>). Major retention risk.</li>
+                        <li><strong>Variable Comp:</strong> Subjective application, low participation (only ~20%). Lacks motivation impact.</li>
+                        <li><strong>Leadership Style:</strong> Perceived as unsatisfactory by segments of the team.</li>
+                        <li><strong>Development:</strong> Lack of clear career paths and growth opportunities cited.</li>
+                    </ul>
+                    <p style="margin-top:15px;"><strong>Urgency:</strong> These factors directly impact motivation, retention, productivity, and ability to attract talent. Addressing Cluster 3 is vital for sustainable success.</p>
+                </div>
+                <div class="flex-item half">
+                    <div class="chart-container small" style="margin-top:0; height: 280px;"> <canvas id="bonusChart"></canvas> </div>
+                    <div class="chart-container medium" style="margin-top: 25px;"><canvas height="300" id="engagementDriversChart" width="600"></canvas></div>
+                    <p class="assumption" style="margin-top: 15px;">Engagement drivers chart is illustrative based on common survey themes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" id="slide-10">
+            <h2>Unlocking Potential: Strategic Levers (Addressing Clusters)</h2>
+            <h3>Focus Areas for Sustainable Profitability</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Six core strategic levers address the challenge clusters: Rebalance portfolio (Cooking focus), Optimize channels (KS/Direct), Turnaround Service, Boost operational efficiency (NS/FTE, premises), Manage costs, and Revitalize People &amp; Culture strategy.
+            </div>
+            <p>Addressing the challenge clusters translates into these key strategic levers for improvement:</p>
+            <ul style="margin-top: 20px; list-style-type: none; padding-left: 5px;">
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🔵 Portfolio Rebalancing (Cluster 1):</strong> Aggressively grow high-margin <strong>Cooking</strong> category share.</li>
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🔵 Channel Optimization (Cluster 1):</strong> Enhance mix towards profitable <strong>Kitchen Studios &amp; Direct Sales</strong>; review and improve ERT terms/profitability.</li>
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🟡 Service Turnaround (Cluster 2):</strong> Transform Service from a loss center into a <strong>profitable, value-adding function</strong>.</li>
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🟡 Operational Efficiency (Cluster 2):</strong> Improve productivity (target higher <strong>NS/FTE</strong>); analyze and potentially address premises limitations.</li>
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🟡 Cost Management (Cluster 2):</strong> Scrutinize controllable overheads &amp; logistics costs for savings opportunities.</li>
+                <li style="margin-bottom: 18px; padding-left: 10px; border-left: 4px solid var(--miele-red); padding: 5px 0 5px 15px;"><strong>🟢 People &amp; Culture Strategy (Cluster 3):</strong> Implement competitive compensation/rewards, foster better leadership/development, and create an enabling work environment.</li>
+            </ul>
+            <p style="margin-top: 15px;">These levers target Gross Margin improvement, OPEX reduction, capital efficiency, and crucial employee engagement.</p>
+            <div class="chart-container medium" style="margin-top: 25px;"><canvas height="300" id="profitPoolsFlywheel" width="600"></canvas></div>
+            <p class="assumption" style="margin-top: 15px;">Flywheel chart illustrates the potential relative impact of key levers.</p>
+        </section>
+
+        <section class="slide" id="slide-11">
+            <h2>Action Plan: Boosting Business Performance</h2>
+            <h3>Prioritized Steps (Next 6-12 Months)</h3>
+            <ul class="timeline">
+                <li><h4>Portfolio &amp; Channel Strategy (Cluster 1)</h4> <p><strong>Q1-Q2:</strong> Deep-dive Cooking segment potential (product/market fit). Initiate targeted marketing/sales programs for Kitchen Studios (focus SE/NO). Review top ERT contracts for margin improvement potential. <strong>Q2-Q3:</strong> Pilot enhanced Direct channel initiatives (e.g., online consultations, focus DK).</p> </li>
+                <li><h4>Service Turnaround Project (Cluster 2)</h4> <p><strong>Q1:</strong> Establish dedicated project team. Conduct full Service P&amp;L analysis (by country/activity). Benchmark pricing, technician utilization, first-time-fix rates. <strong>Q2:</strong> Implement revised pricing structure &amp; efficiency measures. Define &amp; track profitability KPIs. Explore new service offerings (e.g., maintenance plans).</p> </li>
+                <li><h4>Operational Efficiency Drive (Cluster 2/3)</h4> <p><strong>Q1:</strong> Benchmark NS/FTE internally (by function/country) and externally. Identify key process bottlenecks impacting productivity. <strong>Q2:</strong> Initiate premises feasibility study (evaluating needs vs. current state, considering SE HQ benefits, supporting modern work styles).</p> </li>
+                <li><h4>Cost Management Review (Cluster 2)</h4> <p><strong>Q1:</strong> Detailed review of 'Other Overheads' category (€900k) to identify savings. Analyze logistics costs (€170k) for optimization opportunities (e.g., warehousing, transport).</p> </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="slide-12">
+            <h2>Action Plan: Engaging &amp; Developing Our Team (Cluster 3)</h2>
+            <h3>Building a High-Performing &amp; Motivated Finance Function</h3>
+            <p>Addressing Cluster 3 requires immediate and sustained effort, crucial for executing business plans:</p>
+            <ul class="timeline">
+                <li><h4>Compensation &amp; Rewards Modernization</h4><p><strong>Q1:</strong> Conduct comprehensive salary benchmarking (relevant Nordic/country tech/premium goods sectors). <strong>Q2:</strong> Develop proposal for phased salary adjustments towards market median. Design objective, transparent variable compensation plan linked to business &amp; individual goals. Secure budget approval.</p></li>
+                <li><h4>Development &amp; Career Pathing Framework</h4><p><strong>Q2:</strong> Implement structured performance &amp; development dialogues. Define clear career paths within Nordics Finance. <strong>Q3:</strong> Identify high-potential individuals for targeted development. Introduce mentoring/coaching opportunities.</p></li>
+                <li><h4>Leadership &amp; Engagement Enhancement</h4><p><strong>Ongoing from Q1:</strong> Provide leadership training focused on coaching &amp; feedback. Foster open communication channels (town halls, Q&amp;A sessions). Actively listen to team feedback (pulse surveys). Recognize &amp; celebrate successes. Promote cross-functional collaboration.</p></li>
+                <li><h4>Modern Work Environment Alignment</h4><p><strong>Linked to Premises Study (Q2 onwards):</strong> Ensure any future premises decisions actively support collaboration, flexibility, employee well-being, and reflect Miele's premium brand image.</p></li>
+            </ul>
+        </section>
+
+        <section class="slide" id="slide-13">
+            <h2>Potential Financial Uplift (Illustrative)</h2>
+            <h3>Targeting Sustainable Profit Growth</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Successful execution across clusters offers significant profit uplift potential. Illustrative scenario targets ~€460k Operating Profit (+€420k vs ACT), driven by GM gains (+1.5%pt), Service turnaround (+€170k swing), and OPEX savings (€100k).
+            </div>
+            <p>Successful execution, addressing all clusters, could significantly improve profitability. This illustrative scenario shows the potential impact:</p>
+            <p class="assumption" style="margin-bottom: 25px;">Assumption: Gross Margin +1.5%pts (from Cluster 1 actions: mix shift, pricing discipline), Service turns profitable by +€170k (from -€120k loss to +€50k profit - Cluster 2 action), OPEX savings of €100k achieved (Cluster 2 cost management), leading to ~€460k Operating Profit (+€420k vs ACT 2024).</p>
+            <div class="flex-container">
+                <div class="flex-item" style="flex-basis: 100%;">
+                    <div class="chart-container medium" style="height: 360px;"> <canvas id="profitImpactChart"></canvas> </div>
+                </div>
+            </div>
+            <p style="margin-top: 20px;"><strong>Goal:</strong> Move towards benchmark profitability levels while enabling necessary investments in sustainable growth initiatives and our people (Cluster 3).</p>
+        </section>
+
+        <section class="slide" id="slide-14">
+            <h2>Conclusion: A Call for Strategic Action</h2>
+            <h3>Driving Premium Performance in Miele Nordics</h3>
+            <div class="executive-summary">
+                <strong>Key Takeaway:</strong> Miele Nordics faces critical, interconnected challenges hindering profit and growth. Decisive action across Strategy, Operations, and Culture is needed now to realize its premium potential. Recommend immediate deep-dives &amp; cross-functional teams.
+            </div>
+            <p>Miele Nordics possesses strong brand foundations but faces critical strategic (portfolio/channel misalignment), operational (inefficiency, service loss), and cultural (engagement, rewards) challenges hindering profitability and growth. Focused, decisive action is required to realize its premium potential.</p>
+            <p>The path forward necessitates a holistic approach:</p>
+            <ul style="margin-top: 15px; margin-bottom: 25px;">
+                <li><strong>Strategic Realignment (Cluster 1):</strong> Shifting commercial focus aggressively towards high-value products (Cooking) and channels (Kitchen Studios, Direct).</li>
+                <li><strong>Operational Excellence (Cluster 2):</strong> Enhancing efficiency (NS/FTE), transforming Service into a value driver &amp; profit center, optimizing costs, and addressing infrastructure needs.</li>
+                <li><strong>Cultural Transformation (Cluster 3):</strong> Building an engaged, high-performance team through fair rewards, strong leadership, development opportunities, and a modern, enabling environment.</li>
+            </ul>
+            <h3 style="font-size: 1.4em; margin-bottom: 15px; color: var(--text-highlight);">Proposed Next Steps:</h3>
+            <ul style="list-style-type: decimal; padding-left: 25px;">
+                <li><strong>Secure Alignment (Immediate):</strong> Gain Management Team consensus on this assessment, the interconnected challenge clusters, and the proposed strategic levers &amp; action plan framework.</li>
+                <li><strong>Initiate Deep Dives (Target: 30-60 days):</strong> Launch immediate, focused analyses on:
+                    <ul><li>Service P&amp;L drivers (by country/activity) &amp; turnaround options.</li><li>Channel Profitability analysis (actual GM% by channel/country).</li><li>Comprehensive Salary Benchmarking &amp; initial adjustment proposal.</li></ul>
+                </li>
+                <li><strong>Establish Action Teams (Target: Q1):</strong> Form empowered, cross-functional teams to own and drive key initiatives (e.g., Cooking Growth Strategy, Service Turnaround Project, People &amp; Culture Roadmap). Define clear mandates, KPIs, and reporting cadence.</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="slide-15">
+            <h2>Appendix: Data Sources &amp; Notes</h2>
+            <h3>Macroeconomic Context (Slide 2)</h3> <ul><li>Data synthesized from public sources (Eurostat, ECB, National Statistics Offices, IMF/OECD forecasts) covering roughly 2021-2023 period with indicative forecasts. Figures are illustrative for context. Accessed approx. May 2024.</li></ul>
+            <h3>Nordic Market Focus (Slide 3)</h3> <ul><li>Population/Currency data standard sources. GDP Growth estimates indicative (e.g., from European Commission, national banks). Qualitative insights and CAGR based on supplementary material/market reports (source details not provided in original).</li></ul>
+            <h3>Challenges Clustering (Slide 4)</h3> <ul><li>Themes derived from analysis and synthesis of various data points presented within the case study material (P&amp;L figures, engagement survey comments, operational details like Service loss, NS/FTE comparison implicitly needed).</li></ul>
+            <h3>Business Case Data (Slides 5-14)</h3> <ul><li>Core Financials (P&amp;L Waterfall, Service Loss) directly from case study provided (ACT 2024).</li><li>Mix percentages (Product, Channel), GM% by channel, Competitor Benchmarks, Bonus participation %, Salary gap % are explicitly stated as *Assumptions* or derived *Estimates* based on common industry knowledge or implied by the case narrative, used for illustrative purposes in charts and analysis.</li><li>Qualitative statements (e.g., leadership perception, premises suitability) based on interpretation of engagement survey feedback/case notes.</li><li>Illustrative uplift scenario (Slide 13) based on applying reasonable improvement assumptions to key levers identified.</li></ul>
+        </section>
+
+    </main>
+    <div class="progress-indicator">
+        <span class="progress-text" id="progressTextLabel">Slide 1 / 16</span>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBarElement"></div>
+        </div>
+    </div>
+    <div class="navigation">
+        <button class="nav-button" disabled="" id="prevBtn">Previous</button>
+        <button class="nav-button" id="nextBtn">Next</button>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Variable Declarations ---
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const menuToggle = document.getElementById('menu-toggle');
+        const slideMenu = document.getElementById('slide-menu');
+        const menuList = document.getElementById('menu-list');
+        const mainContentArea = document.querySelector('main');
+        const progressBar = document.getElementById('progressBarElement');
+        const progressText = document.getElementById('progressTextLabel');
+        let currentSlide = 0;
+        let charts = {}; // Stores chart instances { canvasId: chartInstance }
+        let menuButtons = [];
+        const totalSlides = slides.length;
+
+       // --- Global Chart Defaults (Updated for Light Theme) ---
+        Chart.defaults.color = 'var(--text-secondary)';
+        Chart.defaults.borderColor = 'var(--border-color)';
+        Chart.defaults.plugins.legend.position = 'bottom';
+        Chart.defaults.plugins.legend.labels.color = 'var(--text-primary)';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        Chart.defaults.plugins.tooltip.titleColor = 'var(--text-primary)';
+        Chart.defaults.plugins.tooltip.bodyColor = 'var(--text-primary)';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(0, 0, 0, 0.2)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.padding = 10;
+        // Register Datalabels plugin globally
+        Chart.register(ChartDataLabels);
+        Chart.defaults.plugins.datalabels.display = false; // Disable datalabels globally by default
+
+
+        // --- Color Palette ---
+        const mieleRed = '#CC0000';
+        const darkGrey = '#6c757d';
+        const mediumGrey = '#adb5bd';
+        const lightBlue = '#0d6efd';
+        const gold = '#ffc107';
+        const positiveGreen = '#198754';
+        const negativeRed = '#dc3545';
+
+        // --- Chart Data for Slide 3 ---
+        const slide3ChartData = { /* ... data remains the same ... */
+            labels: ['2023', '2024 est.', '2025 fct.', '2025 latest'],
+            countries: ['Sweden', 'Denmark', 'Norway', 'Finland'],
+            colors: { Sweden: negativeRed, Denmark: gold, Norway: positiveGreen, Finland: lightBlue },
+            inflation: { Sweden: [6.1, 3.2, 2.1, 2.3], Denmark: [4.7, 2.9, 2.3, 1.4], Norway: [5.4, 3.5, 2.6, 2.5], Finland: [5.0, 3.1, 2.5, 1.7] },
+            gdp: { Sweden: [0.3, 1.1, 1.5, 2.2], Denmark: [0.8, 1.5, 1.8, 2.9], Norway: [1.0, 1.7, 2.0, 2.3], Finland: [0.6, 1.2, 1.6, 1.7] },
+            confidence: { Sweden: [91, 94, 98, 99], Denmark: [89, 93, 97, 98], Norway: [86, 92, 95, 96], Finland: [87, 91, 96, 97] },
+            fx: { labels: ['Q1 2022', 'Q2 2022', 'Q3 2022', 'Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025'], EURSEK: [10.45, 10.65, 10.89, 11.20, 11.25, 11.10, 11.35, 11.45, 11.30, 11.20, 11.10, 10.95, 10.85], EURNOK: [9.75, 9.95, 10.15, 10.35, 10.50, 10.30, 10.45, 10.60, 10.40, 10.20, 10.10, 9.90, 9.80], EURDKK: [7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44, 7.44] }
+        };
+
+        // --- Helper function for Slide 3 charts ---
+        const slide3DatasetsFromMetric = (metric) => slide3ChartData.countries.map(country => ({
+            label: country, data: slide3ChartData[metric][country], borderColor: slide3ChartData.colors[country], backgroundColor: slide3ChartData.colors[country] + '1A', fill: false, tension: 0.3, hidden: country !== 'Sweden'
+        }));
+
+        // --- Populate Side Menu ---
+        function populateMenu() {
+            menuList.innerHTML = ''; menuButtons = [];
+            slides.forEach((slide, index) => {
+                const li = document.createElement('li'); const button = document.createElement('button'); let title = `Slide ${index + 1}`;
+                const h2 = slide.querySelector('h2'); const h1 = slide.querySelector('h1');
+                if (h1 && slide.id === 'slide-0') { title = "Landing"; }
+                else if (h2) {
+                    const baseTitle = h2.textContent.split('(')[0].trim();
+                    if (slide.id === 'slide-1') title = "Agenda"; else if (slide.id === 'slide-2') title = "Market Focus"; else if (slide.id === 'slide-3') title = "Macro Context"; else if (slide.id === 'slide-4') title = "Challenges"; else if (slide.id === 'slide-5') title = "Financials YoY"; else if (slide.id === 'slide-6') title = "Portfolio Mix"; else if (slide.id === 'slide-7') title = "Channel Mix"; else if (slide.id === 'slide-8') title = "Efficiency"; else if (slide.id === 'slide-9') title = "People/Culture"; else if (slide.id === 'slide-10') title = "Strategic Levers"; else if (slide.id === 'slide-11') title = "Action Plan: Biz"; else if (slide.id === 'slide-12') title = "Action Plan: People"; else if (slide.id === 'slide-13') title = "Financial Impact"; else if (slide.id === 'slide-14') title = "Conclusion"; else if (slide.id === 'slide-15') title = "Appendix"; else { title = baseTitle.substring(0, 22); }
+                }
+                button.textContent = title; button.dataset.slideIndex = index;
+                button.addEventListener('click', () => { const targetIndex = parseInt(button.dataset.slideIndex, 10); showSlide(targetIndex); slideMenu.classList.remove('menu-open'); });
+                li.appendChild(button); menuList.appendChild(li); menuButtons.push(button);
+            });
+        }
+
+        // --- Highlight Active Menu Item ---
+        function updateActiveMenuItem(index) { menuButtons.forEach((button, i) => { button.classList.toggle('active-menu-item', i === index); }); }
+
+        // --- Update Progress Indicator ---
+        function updateProgress(index) { const currentSlideNum = index + 1; const progressPercent = (currentSlideNum / totalSlides) * 100; progressBar.style.width = `${progressPercent}%`; progressText.textContent = `Slide ${currentSlideNum} / ${totalSlides}`; }
+
+        // --- Show Slide Function ---
+        function showSlide(index) {
+             if (index < 0 || index >= totalSlides) { console.error("Invalid slide index:", index); return; }
+             slides.forEach((slide, i) => {
+                 slide.classList.remove('active');
+                 if (i !== index) {
+                     const canvases = slide.querySelectorAll('canvas');
+                     canvases.forEach(canvas => { if (canvas.id && charts[canvas.id]) { charts[canvas.id].destroy(); delete charts[canvas.id]; } });
+                     delete slide.dataset.collapsibleInitialized;
+                     // Clear specific slide initialization flags
+                     if (slide.id === 'slide-2') { delete slide.dataset.slide2Initialized; }
+                     if (slide.id === 'slide-3') { delete slide.dataset.slide3Initialized; }
+                     if (slide.id === 'slide-4') { delete slide.dataset.slide4Initialized; }
+                     if (slide.id === 'slide-5') { delete slide.dataset.slide5Initialized; }
+                     if (slide.id === 'slide-7') { delete slide.dataset.slide7Initialized; }
+                 }
+             });
+             slides[index].classList.add('active'); currentSlide = index; prevBtn.disabled = index === 0; nextBtn.disabled = index === totalSlides - 1;
+             initializeChartForSlide(index); initializeCollapsibleCards(slides[index]); updateActiveMenuItem(index); updateProgress(index);
+             if (mainContentArea) { mainContentArea.scrollTop = 0; } window.scrollTo(0, 0);
+        }
+
+        // --- Initialize Chart Function (Handles all slides) ---
+        function initializeChartForSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            const slideElement = slides[index]; const slideId = slideElement.id;
+            const existingCanvases = slideElement.querySelectorAll('canvas');
+            existingCanvases.forEach(canvas => { if (canvas.id && charts[canvas.id]) { charts[canvas.id].destroy(); delete charts[canvas.id]; } });
+
+            // Define chart options for light theme
+            const lightThemeChartOptions = {
+                scales: {
+                    x: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'var(--chart-grid-color)' }, title: { display: true, color: 'var(--text-primary)' } },
+                    y: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'var(--chart-grid-color)' }, title: { display: true, color: 'var(--text-primary)' } },
+                    r: { angleLines: { color: 'var(--chart-grid-color)' }, grid: { color: 'var(--chart-grid-color)' }, pointLabels: { color: 'var(--text-primary)' }, ticks: { backdropColor: 'var(--card-bg-color)', color: 'var(--text-secondary)'} }
+                },
+                plugins: {
+                     title: { color: 'var(--text-primary)' },
+                     legend: { labels: { color: 'var(--text-primary)' } }
+                }
+            };
+
+            // Function to merge base options with specific chart options
+            const mergeOptions = (baseOpts, specificOpts) => {
+                 let merged = JSON.parse(JSON.stringify(baseOpts));
+                 for (let key in specificOpts) {
+                     if (specificOpts.hasOwnProperty(key)) {
+                         if (typeof specificOpts[key] === 'object' && specificOpts[key] !== null && !Array.isArray(specificOpts[key]) && merged[key] && typeof merged[key] === 'object') {
+                             merged[key] = mergeOptions(merged[key], specificOpts[key]);
+                         } else {
+                             merged[key] = specificOpts[key];
+                         }
+                     }
+                 }
+                 return merged;
+            };
+
+
+            switch (slideId) {
+                 case 'slide-2':
+                    if (!slideElement.dataset.slide2Initialized) {
+                        const marketCompCtx = document.getElementById('marketComparisonChart')?.getContext('2d');
+                        if (marketCompCtx) {
+                            const marketData = [
+                                { label: 'Sweden', x: 2.0, y: 70, r: 10.6, color: 'var(--sweden-color)' },
+                                { label: 'Denmark', x: 1.7, y: 77, r: 6.0, color: 'var(--denmark-color)' },
+                                { label: 'Norway', x: 1.5, y: 104, r: 5.6, color: 'var(--norway-color)' },
+                                { label: 'Finland', x: 1.5, y: 65, r: 5.6, color: 'var(--finland-color)' }
+                            ];
+                            charts['marketComparisonChart'] = new Chart(marketCompCtx, {
+                                type: 'bubble',
+                                data: {
+                                    datasets: marketData.map(d => ({
+                                        label: d.label,
+                                        data: [{ x: d.x, y: d.y, r: d.r * 1.5 }],
+                                        backgroundColor: d.color + 'BF',
+                                        borderColor: d.color,
+                                        borderWidth: 1
+                                    }))
+                                },
+                                options: mergeOptions(lightThemeChartOptions, {
+                                    responsive: true, maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: true, position: 'top' },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    const dataPoint = context.dataset.data[0];
+                                                    const countryData = marketData.find(d => d.label === context.dataset.label);
+                                                    return [
+                                                        `${context.dataset.label}`,
+                                                        ` GDP Growth: ${dataPoint.x}%`,
+                                                        ` GDPpc (PPP): $${dataPoint.y}k`,
+                                                        ` Population: ${countryData?.r || '?'}M`
+                                                    ];
+                                                }
+                                            }
+                                        },
+                                         // Annotations for quadrants
+                                        annotation: {
+                                            annotations: {
+                                                lineX: { type: 'line', xMin: 1.75, xMax: 1.75, borderColor: 'rgba(0,0,0,0.2)', borderDash: [6, 6], borderWidth: 1 }, // Avg Growth ~1.75
+                                                lineY: { type: 'line', yMin: 78, yMax: 78, borderColor: 'rgba(0,0,0,0.2)', borderDash: [6, 6], borderWidth: 1 }, // Avg GDPpc ~78k
+                                                labelHighGrowthPotential: { type: 'label', xValue: 2.1, yValue: 92, content: ['Higher Growth', 'Higher Potential'], font: { size: 10 }, color: 'rgba(0,0,0,0.6)'},
+                                                labelLowGrowthHighPotential: { type: 'label', xValue: 1.25, yValue: 92, content: ['Lower Growth', 'Higher Potential'], font: { size: 10 }, color: 'rgba(0,0,0,0.6)'},
+                                                labelHighGrowthLowPotential: { type: 'label', xValue: 2.1, yValue: 68, content: ['Higher Growth', 'Lower Potential'], font: { size: 10 }, color: 'rgba(0,0,0,0.6)'},
+                                                labelLowGrowthLowPotential: { type: 'label', xValue: 1.25, yValue: 68, content: ['Lower Growth', 'Lower Potential'], font: { size: 10 }, color: 'rgba(0,0,0,0.6)'}
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: { title: { text: '2025F GDP Growth (%)' }, min: 1.0, max: 2.5 },
+                                        y: { title: { text: 'GDP per Capita (PPP kUSD, 2023)' }, min: 60, max: 110 }
+                                    }
+                                })
+                            });
+                        }
+                        slideElement.dataset.slide2Initialized = 'true';
+                    }
+                    break;
+                case 'slide-3':
+                    if (!slideElement.dataset.slide3Initialized) {
+                        const commonOptionsSlide3 = mergeOptions(lightThemeChartOptions, {
+                             responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                             scales: { y: { beginAtZero: false, grace: '5%' }, x: { ticks: { font: { size: 10 } } , y: { ticks: { font: { size: 10 } } } } }
+                        });
+                        const inflationCtx = document.getElementById('inflationChart')?.getContext('2d');
+                        if (inflationCtx) { charts['inflationChart'] = new Chart(inflationCtx, { type: 'line', data: { labels: slide3ChartData.labels, datasets: slide3DatasetsFromMetric('inflation') }, options: commonOptionsSlide3 }); }
+                        const gdpCtx = document.getElementById('gdpChart')?.getContext('2d');
+                         if (gdpCtx) { charts['gdpChart'] = new Chart(gdpCtx, { type: 'line', data: { labels: slide3ChartData.labels, datasets: slide3DatasetsFromMetric('gdp') }, options: commonOptionsSlide3 }); }
+                        const confidenceCtx = document.getElementById('confidenceChart')?.getContext('2d');
+                        if (confidenceCtx) { charts['confidenceChart'] = new Chart(confidenceCtx, { type: 'line', data: { labels: slide3ChartData.labels, datasets: slide3DatasetsFromMetric('confidence') }, options: mergeOptions(commonOptionsSlide3, { scales: { y: { beginAtZero: true } } }) }); }
+                        const fxCtx = document.getElementById('fxEvolutionChart')?.getContext('2d');
+                        if (fxCtx) { charts['fxEvolutionChart'] = new Chart(fxCtx, { type: 'line', data: { labels: slide3ChartData.fx.labels, datasets: [ { label: 'Sweden', _country: 'Sweden', data: slide3ChartData.fx.EURSEK, borderColor: slide3ChartData.colors.Sweden, fill: false, tension: 0.3, hidden: false }, { label: 'Denmark', _country: 'Denmark', data: slide3ChartData.fx.EURDKK, borderColor: slide3ChartData.colors.Denmark, fill: false, tension: 0.3, hidden: true }, { label: 'Norway', _country: 'Norway', data: slide3ChartData.fx.EURNOK, borderColor: slide3ChartData.colors.Norway, fill: false, tension: 0.3, hidden: true }, ] }, options: commonOptionsSlide3 }); }
+
+                        // Filter Button Logic including Compare All
+                        const countryButtons = slideElement.querySelectorAll('.filter-btn[data-country]');
+                        const compareAllBtn = document.getElementById('compareAllBtn');
+
+                        const updateChartVisibility = () => {
+                             const activeCountries = Array.from(countryButtons)
+                                .filter(b => b.classList.contains('active'))
+                                .map(b => b.dataset.country);
+
+                             ['inflationChart', 'gdpChart', 'confidenceChart', 'fxEvolutionChart'].forEach(chartId => {
+                                const chart = charts[chartId];
+                                if (chart) {
+                                    chart.data.datasets.forEach((ds, index) => {
+                                        const datasetCountry = ds._country || ds.label;
+                                        chart.setDatasetVisibility(index, activeCountries.includes(datasetCountry));
+                                    });
+                                    chart.update();
+                                }
+                            });
+                            // Update Compare All button text
+                            const numActive = activeCountries.length;
+                            if (compareAllBtn) {
+                                compareAllBtn.textContent = (numActive === 1 && activeCountries[0] === 'Sweden') || numActive === 0 ? 'Compare All' : 'Reset View';
+                            }
+                        };
+
+                        countryButtons.forEach(button => {
+                            if (!button.dataset.listenerAttached) {
+                                button.addEventListener('click', () => {
+                                    button.classList.toggle('active');
+                                    updateChartVisibility();
+                                });
+                                button.dataset.listenerAttached = 'true';
+                            }
+                        });
+
+                        if (compareAllBtn && !compareAllBtn.dataset.listenerAttached) {
+                             compareAllBtn.addEventListener('click', () => {
+                                const numActive = Array.from(countryButtons).filter(b => b.classList.contains('active')).length;
+                                const activateAll = (numActive <= 1); // If 0 or 1 is active, activate all. Otherwise, reset.
+
+                                countryButtons.forEach(btn => {
+                                    btn.classList.toggle('active', activateAll || btn.dataset.country === 'Sweden'); // Activate all or reset to Sweden
+                                });
+                                updateChartVisibility();
+                            });
+                            compareAllBtn.dataset.listenerAttached = 'true';
+                        }
+                        // Initial update in case state is remembered weirdly
+                        updateChartVisibility();
+                        slideElement.dataset.slide3Initialized = 'true';
+                    }
+                    break;
+                case 'slide-4':
+                    if (!slideElement.dataset.slide4Initialized) {
+                         const miniChartOptions = {
+                            responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: false }, tooltip: { enabled: false } },
+                            scales: { x: { display: false }, y: { display: false } }
+                        };
+                        const miniBarOptions = mergeOptions(miniChartOptions, {
+                             indexAxis: 'y', scales: { x: { display: true, beginAtZero: true, max: 100, ticks:{display: false}, grid:{display: false} }, y: { display: true, ticks: { font: { size: 9 }, color: 'var(--text-secondary)'}, grid:{display: false} } }
+                        });
+
+                        // Cluster 1 Charts (Bar Charts)
+                        const strategyMixCtx = document.getElementById('strategyMixChart')?.getContext('2d');
+                        if (strategyMixCtx) {
+                            charts['strategyMixChart'] = new Chart(strategyMixCtx, {
+                                type: 'bar',
+                                data: { labels: ['Cooking', 'Laundry'], datasets: [{ label: 'Current', data: [15, 60], backgroundColor: mediumGrey, borderRadius: 2 }, { label: 'Target', data: [30, 50], backgroundColor: lightBlue, borderRadius: 2 }] }, // Example target
+                                options: miniBarOptions
+                            });
+                        }
+                        const strategyChannelCtx = document.getElementById('strategyChannelChart')?.getContext('2d');
+                        if (strategyChannelCtx) {
+                             charts['strategyChannelChart'] = new Chart(strategyChannelCtx, {
+                                type: 'bar',
+                                data: { labels: ['Direct/KS', 'ERT'], datasets: [{ label: 'Current', data: [50, 40], backgroundColor: mediumGrey, borderRadius: 2 }, { label: 'Target', data: [60, 30], backgroundColor: lightBlue, borderRadius: 2 }] }, // Example target (KS+Direct = 35+15=50)
+                                options: miniBarOptions
+                            });
+                        }
+
+                        // Cluster 2 Chart (Aftersales Trend)
+                        const aftersalesTrendCtx = document.getElementById('aftersalesTrendChart')?.getContext('2d');
+                        if (aftersalesTrendCtx) {
+                             charts['aftersalesTrendChart'] = new Chart(aftersalesTrendCtx, {
+                                type: 'bar',
+                                data: {
+                                    labels: ['2021', '2022', '2023', '2024'],
+                                    datasets: [{
+                                        label: 'Aftersales P/L (k€)',
+                                        data: [50, 10, 0, -120], // Hypothetical data
+                                        backgroundColor: (ctx) => ctx.raw >= 0 ? positiveGreen : negativeRed,
+                                        borderRadius: 3
+                                    }]
+                                },
+                                options: mergeOptions(miniChartOptions, {
+                                    plugins: { tooltip: { enabled: true, callbacks: { label: ctx => `€${ctx.raw}k` } } },
+                                    scales: {
+                                        y: { display: true, ticks: { font: { size: 9 }, color: 'var(--text-secondary)', callback: v => `${v}k` }, grid: { display: false } },
+                                        x: { display: true, ticks: { font: { size: 9 }, color: 'var(--text-secondary)' }, grid: { display: false } }
+                                    }
+                                })
+                            });
+                        }
+
+                        slideElement.dataset.slide4Initialized = 'true';
+                    }
+                    break;
+                case 'slide-5':
+                    if (!slideElement.dataset.slide5Initialized) {
+                        const profitBridgeCtx = document.getElementById('profitBridgeChart')?.getContext('2d');
+                        if (profitBridgeCtx) {
+                            const op2023 = 99; const volChange = 171; const chnMixChange = -78; const prdMixChange = -102; const srvChange = -150; const mktgChange = 200; const otherOpexChange = -100; const op2024 = 40;
+                            const point1 = op2023; const point2 = point1 + volChange; const point3 = point2 + chnMixChange; const point4 = point3 + prdMixChange; const point5 = point4 + srvChange; const point6 = point5 + mktgChange; const point7 = point6 + otherOpexChange;
+
+                            charts['profitBridgeChart'] = new Chart(profitBridgeCtx, {
+                                type: 'bar',
+                                data: {
+                                    labels: ['OP 2023 (Est.)', 'Volume', 'Channel Mix', 'Product Mix', 'Service P/L', 'Marketing', 'Other OPEX', 'OP 2024 (ACT)'],
+                                    datasets: [{
+                                        label: 'Profit Bridge (k€)',
+                                        data: [ [0, point1], [point1, point2], [point2, point3], [point3, point4], [point4, point5], [point5, point6], [point6, point7], [0, op2024] ],
+                                        backgroundColor: [ mediumGrey, volChange >= 0 ? positiveGreen : negativeRed, chnMixChange >= 0 ? positiveGreen : negativeRed, prdMixChange >= 0 ? positiveGreen : negativeRed, srvChange >= 0 ? positiveGreen : negativeRed, mktgChange >= 0 ? positiveGreen : negativeRed, otherOpexChange >= 0 ? positiveGreen : negativeRed, mieleRed ]
+                                    }]
+                                },
+                                options: mergeOptions(lightThemeChartOptions, {
+                                    indexAxis: 'x', responsive: true, maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: false }, title: { display: true, text: 'Operating Profit Bridge: 2023 (Est.) to 2024 (ACT) (k€)', font: { size: 14 } },
+                                        tooltip: { callbacks: { label: function(context) { let label = context.dataset.label || ''; const barIndex = context.dataIndex; const valStart = context.raw[0]; const valEnd = context.raw[1]; let value; let changeLabel = context.label || ''; if (barIndex === 0 || barIndex === 7) { value = valEnd; return `${changeLabel}: €${value.toLocaleString()}k`; } else { value = valEnd - valStart; const sign = value >= 0 ? '+' : ''; const deltaLabels = ['Volume', 'Channel Mix', 'Product Mix', 'Service P/L', 'Marketing', 'Other OPEX']; changeLabel = deltaLabels[barIndex - 1] || changeLabel; return `${changeLabel}: ${sign}€${value.toLocaleString()}k`; } } } },
+                                        // Datalabels configuration
+                                        datalabels: {
+                                            display: true,
+                                            align: (context) => { // Position label above positive bars, below negative
+                                                 const barIndex = context.dataIndex;
+                                                 if (barIndex === 0 || barIndex === 7) return 'end'; // Align end bars
+                                                 const value = context.dataset.data[barIndex][1] - context.dataset.data[barIndex][0];
+                                                 return value >= 0 ? 'end' : 'start';
+                                            },
+                                            anchor: 'end', // Anchor label to the end of the bar segment
+                                            offset: 4, // Small offset from the bar
+                                            color: 'var(--text-primary)',
+                                            font: { size: 10, weight: '500' },
+                                            formatter: (value, context) => {
+                                                const barIndex = context.dataIndex;
+                                                let displayValue;
+                                                 if (barIndex === 0 || barIndex === 7) { // Start and End bars
+                                                     displayValue = value[1]; // Show the absolute value
+                                                 } else { // Delta bars
+                                                     displayValue = value[1] - value[0]; // Show the change
+                                                 }
+                                                return `€${displayValue.toLocaleString()}k`;
+                                            }
+                                        }
+                                    },
+                                    scales: { y: { stacked: false, title: { display: true, text: 'k€' } }, x: { stacked: false } }
+                                })
+                            });
+                        }
+                        slideElement.dataset.slide5Initialized = 'true';
+                    }
+                    break;
+                case 'slide-6':
+                     const prodMixCtx = document.getElementById('productMixChart')?.getContext('2d');
+                     if (prodMixCtx && !charts['productMixChart']) {
+                        charts['productMixChart'] = new Chart(prodMixCtx,{type:'doughnut',data:{labels:['Laundry','Cooking','Other Appliances'],datasets:[{label:'Net Sales Mix % (Est.)',data:[60,15,25],backgroundColor:[mieleRed, gold, lightBlue],hoverOffset:4, borderColor: 'var(--card-bg-color)', borderWidth: 2}]},options: mergeOptions(lightThemeChartOptions, {responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'Estimated Product Mix by Net Sales %', font: {size: 14}}}})});
+                     }
+                     break;
+                case 'slide-7':
+                     if (!slideElement.dataset.slide7Initialized) {
+                        const bubbleCtx = document.getElementById('channelBubbleChart')?.getContext('2d');
+                        if (bubbleCtx) {
+                            charts['channelBubbleChart'] = new Chart(bubbleCtx, {
+                                type: 'bubble',
+                                data: { datasets: [ { label: 'ERT', data: [{x: 30, y: 40, r: 15}], backgroundColor: negativeRed }, { label: 'Kitchen Studios', data: [{x: 42, y: 35, r: 18}], backgroundColor: lightBlue }, { label: 'Direct', data: [{x: 38, y: 15, r: 12}], backgroundColor: positiveGreen }, { label: 'Service', data: [{x: 0, y: 10, r: 10}], backgroundColor: mediumGrey } ] },
+                                options: mergeOptions(lightThemeChartOptions, {
+                                    responsive: true, maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: true },
+                                        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: GM ${ctx.raw.x}%, Share ${ctx.raw.y}%` } },
+                                        annotation: { annotations: {
+                                            quadrantX: { type: 'line', xMin: 35, xMax: 35, borderColor: 'rgba(0,0,0,0.25)', borderWidth: 1, label: { display: true, content: '↑ Higher GM%', color: 'var(--text-secondary)', position: 'end'} },
+                                            quadrantY: { type: 'line', yMin: 25, yMax: 25, borderColor: 'rgba(0,0,0,0.25)', borderWidth: 1, label: { display: true, content: '↑ Higher Share', color: 'var(--text-secondary)', position: 'start'} },
+                                            labelQ1: { type: 'label', xValue: 42.5, yValue: 42.5, backgroundColor: 'transparent', color: 'var(--text-secondary)', font: { size: 11 }, content: ['High GM', 'High Share'], textAlign: 'center'},
+                                            labelQ2: { type: 'label', xValue: 42.5, yValue: 17.5, backgroundColor: 'transparent', color: 'var(--text-secondary)', font: { size: 11 }, content: ['High GM', 'Low Share'], textAlign: 'center'},
+                                            labelQ3: { type: 'label', xValue: 15, yValue: 17.5, backgroundColor: 'transparent', color: 'var(--text-secondary)', font: { size: 11 }, content: ['Low GM', 'Low Share'], textAlign: 'center'},
+                                            labelQ4: { type: 'label', xValue: 15, yValue: 42.5, backgroundColor: 'transparent', color: 'var(--text-secondary)', font: { size: 11 }, content: ['Low GM', 'High Share'], textAlign: 'center'}
+                                        }}
+                                    },
+                                    scales: { x: { title: { text: 'Gross Margin %' }, min: 0, max: 50 }, y: { title: { text: 'Sales Share %' }, min: 0, max: 50 } }
+                                })
+                            });
+                        }
+                        const shiftCtx = document.getElementById('channelShiftChart')?.getContext('2d');
+                        if (shiftCtx) {
+                            charts['channelShiftChart'] = new Chart(shiftCtx, {
+                                type: 'bar',
+                                data: { labels: ['Shift 5% ERT → Direct', 'Shift 5% ERT → KS'], datasets: [{ label: 'Estimated Margin Uplift (€k)', data: [40, 60], backgroundColor: [positiveGreen, lightBlue], borderRadius: 6 }] },
+                                options: mergeOptions(lightThemeChartOptions, {
+                                    responsive: true, maintainAspectRatio: false,
+                                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: €${ctx.parsed.y}k` } } },
+                                    scales: { y: { beginAtZero: true, ticks: { callback: v => `€${v}k` }, title: { text: 'Uplift (€k)' } } }
+                                })
+                            });
+                        }
+                        slideElement.dataset.slide7Initialized = 'true';
+                    }
+                    break;
+                 case 'slide-8':
+                    const serviceRadarCtx = document.getElementById('serviceTurnaroundRadar')?.getContext('2d');
+                    if (serviceRadarCtx && !charts['serviceTurnaroundRadar']) {
+                        charts['serviceTurnaroundRadar'] = new Chart(serviceRadarCtx, {
+                            type: 'radar',
+                            data: { labels: ['Response Time', 'Tech Utilization', 'Revenue/FTE', 'Customer NPS', 'P&L Contrib.'], datasets: [ { label: 'Miele Current (Est.)', data: [40, 50, 30, 45, 10], backgroundColor: 'rgba(204, 0, 0, 0.2)', borderColor: mieleRed, pointBackgroundColor: mieleRed }, { label: 'Target/Benchmark', data: [70, 75, 60, 80, 70], backgroundColor: 'rgba(13, 110, 253, 0.2)', borderColor: lightBlue, pointBackgroundColor: lightBlue } ] },
+                            options: mergeOptions(lightThemeChartOptions, { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Service Turnaround Dashboard (Illustrative)', font: { size: 14 } } }, scales: { r: { suggestedMin: 0, suggestedMax: 100 } } })
+                        });
+                    }
+                    break;
+                case 'slide-9':
+                    const bonusCtx = document.getElementById('bonusChart')?.getContext('2d');
+                    if (bonusCtx && !charts['bonusChart']) {
+                        charts['bonusChart'] = new Chart(bonusCtx,{type:'doughnut',data:{labels:['Receive Variable Comp.','No Variable Comp.'],datasets:[{label:'% Employees',data:[20,80],backgroundColor:[lightBlue, mediumGrey],hoverOffset:4, borderColor: 'var(--card-bg-color)', borderWidth: 2}]},options: mergeOptions(lightThemeChartOptions, {responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'Variable Compensation Eligibility (~Est.)', font: {size: 14}}, legend: { display: true, position: 'bottom' }}})});
+                    }
+                    const engageCtx = document.getElementById('engagementDriversChart')?.getContext('2d');
+                    if (engageCtx && !charts['engagementDriversChart']) {
+                         charts['engagementDriversChart'] = new Chart(engageCtx, {
+                            type: 'bar',
+                            data: { labels: ['Salary Fairness', 'Leadership', 'Career Dev.', 'Work Env.'], datasets: [ { label: 'Engagement Score (Illustrative)', data: [40, 55, 50, 60], backgroundColor: [negativeRed, mediumGrey, mediumGrey, lightBlue] } ] },
+                            options: mergeOptions(lightThemeChartOptions, { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Key Engagement Driver Scores (Illustrative)', font: {size: 14} }, legend: {display: false} }, scales: { x: { beginAtZero: true, max: 100 } } })
+                        });
+                    }
+                    break;
+                case 'slide-10':
+                    const flywheelCtx = document.getElementById('profitPoolsFlywheel')?.getContext('2d');
+                    if (flywheelCtx && !charts['profitPoolsFlywheel']) {
+                        charts['profitPoolsFlywheel'] = new Chart(flywheelCtx, {
+                            type: 'doughnut',
+                            data: { labels: ['Cooking Uplift', 'Service Recovery', 'Channel Mix Shift', 'Efficiency Gains', 'Cost Mgmt'], datasets: [{ label: 'Potential Impact Areas', data: [25, 25, 20, 15, 15], backgroundColor: [gold, positiveGreen, lightBlue, mediumGrey, darkGrey], hoverOffset: 4, borderColor: 'var(--card-bg-color)', borderWidth: 2 }] },
+                            options: mergeOptions(lightThemeChartOptions, { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Profitability Levers: Strategic Flywheel (Est. Impact)', font: {size: 14} }, legend: { position: 'bottom' } } })
+                        });
+                    }
+                    break;
+                case 'slide-13':
+                    const profitCtx = document.getElementById('profitImpactChart')?.getContext('2d');
+                    if (profitCtx && !charts['profitImpactChart']) {
+                         const cOP=40, gmU=150, sT=170, oS=100; const pOP=cOP+gmU+sT+oS;
+                         charts['profitImpactChart'] = new Chart(profitCtx,{type:'bar',data:{labels:['Current OP','GM Uplift','Service Turn.','OPEX Savings','Potential OP'],datasets:[{label:'Profit Uplift (k€)',data:[[0,cOP],[cOP,cOP+gmU],[cOP+gmU,cOP+gmU+sT],[cOP+gmU+sT,pOP],[0,pOP]],backgroundColor:[darkGrey,positiveGreen,positiveGreen,positiveGreen,mieleRed],}]},options: mergeOptions(lightThemeChartOptions, {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Illustrative Path to Improved Operating Profit (k€)', font: {size: 14}},tooltip:{callbacks:{label:function(c){let l=c.label||'',s=c.raw[0],e=c.raw[1],v;if(l==='Current OP'||l==='Potential OP'){v=e;return l+': '+v.toLocaleString()+' k€'}else{v=e-s;return l+': +'+v.toLocaleString()+' k€'}}}}},scales:{y:{stacked:true,title:{display:true,text:'k€'}},x:{stacked:true}}})});
+                    }
+                    break;
+            }
+        }
+
+            // --- Initialize Collapsible Cards ---
+            function initializeCollapsibleCards(slideElement) {
+                const cards = slideElement.querySelectorAll('.collapsible-card');
+                 if (cards.length > 0 && !slideElement.dataset.collapsibleInitialized) {
+                    cards.forEach(card => {
+                        const header = card.querySelector('.card-header');
+                        if(header) {
+                             const toggleCard = (event) => {
+                                 const clickedCard = event.currentTarget.closest('.collapsible-card');
+                                 const isExpanded = clickedCard.classList.contains('expanded');
+
+                                 // Close all other cards on the same slide
+                                 slideElement.querySelectorAll('.collapsible-card.expanded').forEach(otherCard => {
+                                     if (otherCard !== clickedCard) {
+                                         otherCard.classList.remove('expanded');
+                                     }
+                                 });
+
+                                 // Toggle the clicked card
+                                 clickedCard.classList.toggle('expanded', !isExpanded);
+                             };
+                             // Prevent adding multiple listeners
+                             if (!header.dataset.listenerAttached) {
+                                 header.addEventListener('click', toggleCard);
+                                 header.dataset.listenerAttached = 'true';
+                             }
+                         }
+                    });
+                    slideElement.dataset.collapsibleInitialized = 'true';
+                 }
+            }
+
+            // --- Event Listeners ---
+            prevBtn.addEventListener('click', () => { if (currentSlide > 0) showSlide(currentSlide - 1); });
+            nextBtn.addEventListener('click', () => { if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1); });
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                if (e.key === 'ArrowRight' && !nextBtn.disabled) { showSlide(currentSlide + 1); }
+                else if (e.key === 'ArrowLeft' && !prevBtn.disabled) { showSlide(currentSlide - 1); }
+                else if (e.key === 'Escape') { if (slideMenu.classList.contains('menu-open')) { slideMenu.classList.remove('menu-open'); } slides[currentSlide].querySelectorAll('.collapsible-card.expanded').forEach(c => c.classList.remove('expanded')); }
+                else if (e.key === 'm' || e.key === 'M') { slideMenu.classList.toggle('menu-open'); }
+            });
+            menuToggle.addEventListener('click', (e) => { e.stopPropagation(); slideMenu.classList.toggle('menu-open'); });
+            document.addEventListener('click', (e) => { if (slideMenu.classList.contains('menu-open') && !slideMenu.contains(e.target) && e.target !== menuToggle) { slideMenu.classList.remove('menu-open'); } });
+
+            // --- Initial setup ---
+            populateMenu();
+            showSlide(0); // Show the first slide initially
+        });
+    </script>
+</body>
+</html>
