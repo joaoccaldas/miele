@@ -354,7 +354,15 @@
         .flex-item { flex: 1; display: flex; flex-direction: column; min-width: 180px; } /* Default flex item */
         .flex-item.quarter { flex-basis: calc(25% - 15px); } /* Approx 1/4 width */
         .flex-item.half { flex-basis: calc(50% - 15px); } /* Approx 1/2 width */
-        .flex-item.third { flex-basis: calc(33.333% - 14px); display: flex; flex-direction: column; } /* Approx 1/3 width */
+        /* --- START: FIX FOR SLIDE 4 CHALLENGES --- */
+        .flex-item.third {
+            flex: 1 1 0; /* Allow equal growing/shrinking, starting from 0 basis */
+            min-width: 280px; /* Prevent cards from becoming too narrow before wrapping */
+            display: flex;
+            flex-direction: column;
+        }
+        /* --- END: FIX FOR SLIDE 4 CHALLENGES --- */
+
 
         /* --- Chart Container & Wrapper --- */
         .chart-container {
@@ -502,6 +510,7 @@
         }
         .pillar { /* Now acts as container for collapsible card */
             flex: 1;
+            min-width: 250px; /* Added min-width for better wrapping */
             /* Removed border - handled by .collapsible-card */
         }
         /* Ensure collapsible card takes full height */
@@ -770,8 +779,9 @@
                  <div class="summary-item"><span class="c3">🟢</span>People</div>
             </div>
             <div class="flex-container">
-                <div class="flex-item third">
-                    <div class="collapsible-card cluster-1"> <div class="card-header"><h4>🔵 Polaris - Winning on <b>Mix</b> </h4><span class="toggle-icon">▼</span></div>
+                <div class="flex-item third"> <!-- This div wraps the first card -->
+                    <div class="collapsible-card cluster-1">
+                        <div class="card-header"><h4>🔵 Polaris - Winning on <b>Mix</b> </h4><span class="toggle-icon">▼</span></div>
                         <div class="card-content">
                             <p><b>Clear Country, Channel, Customer and Category Strategy</b> as big bet of profitable growth while defending position in Laundry &amp; channels vs. market potential.</p>
                             <div class="mini-chart-container">
@@ -793,8 +803,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-item third">
-                     <div class="collapsible-card cluster-2"> <div class="card-header"><h4>🟡 Polaris - Winning on <b>Operational Efficiencies</b> &amp; <b>Fit-for-growth Cost Structure</b>b></h4><span class="toggle-icon">▼</span></div>
+                <div class="flex-item third"> <!-- This div wraps the second card -->
+                     <div class="collapsible-card cluster-2">
+                        <div class="card-header"><h4>🟡 Polaris - Winning on <b>Operational Efficiencies</b> &amp; <b>Fit-for-growth Cost Structure</b>b></h4><span class="toggle-icon">▼</span></div>
                         <div class="card-content">
                             <p><b>High</b> cost base negatively offsets Gross Margin, putting stress on <b>bottom-line</b></p>
                             <div class="mini-chart-container" style="justify-content: center;">
@@ -809,11 +820,12 @@
                                 <li>Aftersales Turnaround (Loss of €120k)</li>
                                 <li>Productivity (Low NS/FTE vs Benchmarks)</li>
                             </ul>
-                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-item third">
-                     <div class="collapsible-card cluster-3"> <div class="card-header"><h4>🟢 Polaris - Winning Team</h4><span class="toggle-icon">▼</span></div>
+                <div class="flex-item third"> <!-- This div wraps the third card -->
+                     <div class="collapsible-card cluster-3">
+                        <div class="card-header"><h4>🟢 Polaris - Winning Team</h4><span class="toggle-icon">▼</span></div>
                         <div class="card-content">
                             <p> Disengaged workforce &amp; weak performance culture and compensation and benefits not aligned with performnance hinder growth and retention.</p>
                             <div class="mini-chart-container">
@@ -998,8 +1010,8 @@
             <h2>Conclusion: A Call for Strategic Action</h2>
             <h3>Driving Premium Performance in Miele Nordics</h3>
              <p>While the Nordic Markets continue to be shaken by internal and external challenges, the region represents a significant opportunity for Miele. By aligning and executing a focused and measurable strategy, Miele Nordics can accelerate its growth path while sustainably improve its margins by investing where it matter most for the short and long term.</p>
-             <div class="conclusion-pillars">
-                 <div class="pillar">
+             <div class="conclusion-pillars flex-container"> <!-- Added flex-container here -->
+                 <div class="pillar flex-item"> <!-- Added flex-item here -->
                      <div class="collapsible-card cluster-1">
                          <div class="card-header">
                              <h4>🔵 Strategy</h4>
@@ -1015,7 +1027,7 @@
                          </div>
                      </div>
                  </div>
-                 <div class="pillar">
+                 <div class="pillar flex-item"> <!-- Added flex-item here -->
                       <div class="collapsible-card cluster-2">
                          <div class="card-header">
                              <h4>🟡 Financial efficiencies</h4>
@@ -1031,7 +1043,7 @@
                          </div>
                      </div>
                  </div>
-                 <div class="pillar">
+                 <div class="pillar flex-item"> <!-- Added flex-item here -->
                       <div class="collapsible-card cluster-3">
                          <div class="card-header">
                              <h4>🟢 Team&Culture</h4>
@@ -1205,15 +1217,13 @@
                         case 'slide-5': title = "Financials YoY"; break;
                         case 'slide-6': title = "Portfolio Mix"; break;
                         case 'slide-7': title = "Channel Mix"; break;
-                        case 'slide-8': title = "Efficiency"; break;
+                        // Removed references to non-existent slides if any
                         case 'slide-9': title = "People/Culture"; break;
-                        case 'slide-10': title = "Strategic Levers"; break;
-                        case 'slide-11': title = "Action Plan: Biz"; break;
-                        case 'slide-12': title = "Action Plan: People"; break;
+                        case 'slide-12': title = "Action Plan: People"; break; // Ensure IDs match existing slides
                         case 'slide-13': title = "Financial Impact"; break;
                         case 'slide-14': title = "Conclusion"; break;
                         case 'slide-15': title = "Appendix"; break;
-                        default: title = baseTitle.substring(0, 22); // Fallback to truncated H2
+                        default: title = baseTitle.substring(0, 22) + (baseTitle.length > 22 ? '...' : ''); // Fallback to truncated H2
                     }
                 }
                 button.textContent = title;
@@ -1277,16 +1287,23 @@
                      delete slide.dataset.slide5Initialized;
                      delete slide.dataset.slide6Initialized;
                      delete slide.dataset.slide7Initialized;
-                     delete slide.dataset.slide8Initialized;
+                     //delete slide.dataset.slide8Initialized; // Remove if slide 8 doesn't exist or need init
                      delete slide.dataset.slide9Initialized;
-                     delete slide.dataset.slide10Initialized;
+                     //delete slide.dataset.slide10Initialized; // Remove if slide 10 doesn't exist or need init
                      delete slide.dataset.slide13Initialized;
+
                      // Remove action menu listener if leaving slide with menu
                      const actionBtn = slide.querySelector('.actionMenuBtn'); // Use class
                      if (actionBtn && actionBtn.dataset.listenerAttached) {
+                        // Clean up the listener to avoid memory leaks
+                        // Note: The exact removal might need referencing the handler if stored,
+                        // but setting the flag should prevent re-adding.
+                         actionBtn.removeEventListener('click', actionBtn._clickHandler); // Assuming handler stored
                          delete actionBtn.dataset.listenerAttached;
-                         // Note: Removing the actual listener might be complex if multiple were added;
-                         // relying on the fact it's only added once per slide activation.
+                         delete actionBtn._clickHandler; // Clean up stored handler
+                         // Also remove the global listener associated with this menu
+                         document.removeEventListener('click', actionBtn._closeHandler, true);
+                         delete actionBtn._closeHandler;
                      }
                  }
              });
@@ -1303,7 +1320,7 @@
              initializeChartForSlide(index);
              initializeCollapsibleCards(slides[index]); // Handles slides 4 and 14
              initializeAgendaExpansion(slides[index]); // Handles slide 1 agenda
-             initializeActionMenu(slides[index]); // Handles action menus on slides 5, 6, 7, 8, 9
+             initializeActionMenu(slides[index]); // Handles action menus on slides 5, 6, 7, 9
 
              // Update UI elements
              updateActiveMenuItem(index);
@@ -1378,7 +1395,7 @@
                                     datasets: marketData.map(d => ({
                                         label: d.label, data: [{ x: d.x, y: d.y, r: d.r * 1.5 }],
                                         backgroundColor: d.color + 'BF', borderColor: d.color, borderWidth: 1,
-                                        hidden: true // Default all to hidden
+                                        hidden: false // Default all to visible now
                                     }))
                                 },
                                 options: mergeOptions(baseChartOptions, { // Use base options (grid off)
@@ -1543,13 +1560,7 @@
                          slideElement.dataset.slide7Initialized = 'true';
                      }
                     break;
-                 case 'slide-8': // Efficiency Gaps
-                    if (!slideElement.dataset.slide8Initialized) {
-                         const serviceProfitCtx = document.getElementById('serviceProfitTrendChart')?.getContext('2d');
-                         if (serviceProfitCtx) { charts['serviceProfitTrendChart'] = new Chart(serviceProfitCtx, { type: 'bar', data: { labels: ['2021', '2022', '2023', '2024'], datasets: [{ label: 'Service P/L (k€)', data: [50, 10, 0, -120], backgroundColor: (ctx) => ctx.raw >= 0 ? positiveGreen : negativeRed, borderRadius: 3 }] }, options: mergeOptions(baseChartOptions, { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: true, callbacks: { label: ctx => `€${ctx.raw}k` } } }, scales: { y: { display: true, ticks: { font: { size: 9 }, color: 'var(--text-secondary)', callback: v => `${v}k` } }, x: { display: true, ticks: { font: { size: 9 }, color: 'var(--text-secondary)' } } } }) }); }
-                         slideElement.dataset.slide8Initialized = 'true';
-                    }
-                    break;
+                 // Removed case 'slide-8' as it doesn't seem to have unique charts in the provided HTML
                 case 'slide-9': // Engagement & Talent
                     if (!slideElement.dataset.slide9Initialized) {
                         const bonusCtx = document.getElementById('bonusChart')?.getContext('2d');
@@ -1559,13 +1570,7 @@
                         slideElement.dataset.slide9Initialized = 'true';
                     }
                     break;
-                case 'slide-10': // Strategic Levers
-                    if (!slideElement.dataset.slide10Initialized) {
-                        const flywheelCtx = document.getElementById('profitPoolsFlywheel')?.getContext('2d');
-                        if (flywheelCtx) { charts['profitPoolsFlywheel'] = new Chart(flywheelCtx, { type: 'doughnut', data: { labels: ['Cooking Uplift', 'Service Recovery', 'Channel Mix Shift', 'Efficiency Gains', 'Cost Mgmt'], datasets: [{ label: 'Potential Impact Areas', data: [25, 25, 20, 15, 15], backgroundColor: [gold, positiveGreen, lightBlue, mediumGrey, darkGrey], hoverOffset: 4, borderColor: 'var(--card-bg-color)', borderWidth: 2 }] }, options: mergeOptions(baseChartOptions, { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Profitability Levers: Strategic Flywheel (Est. Impact)', font: {size: 14} }, legend: { position: 'bottom' } } }) }); }
-                        slideElement.dataset.slide10Initialized = 'true';
-                    }
-                    break;
+                 // Removed case 'slide-10' as it doesn't seem to have unique charts
                 case 'slide-13': // Financial Uplift
                     if (!slideElement.dataset.slide13Initialized) {
                         const profitCtx = document.getElementById('profitImpactChart')?.getContext('2d');
@@ -1622,42 +1627,51 @@
         }
 
         // --- Initialize Floating Action Menu (Multiple Slides) ---
-        function initializeActionMenu(slideElement) {
-            const targetSlideIds = ['slide-5', 'slide-6', 'slide-7', 'slide-8', 'slide-9'];
-            if (!targetSlideIds.includes(slideElement.id)) return;
+         function initializeActionMenu(slideElement) {
+             const targetSlideIds = ['slide-5', 'slide-6', 'slide-7', 'slide-9']; // Adjusted IDs based on actual slides with menus
+             if (!targetSlideIds.includes(slideElement.id)) return;
 
-            const actionBtn = slideElement.querySelector('.actionMenuBtn'); // Use class selector
-            const actionContent = slideElement.querySelector('.actionMenuContent'); // Use class selector
+             const actionBtn = slideElement.querySelector('.actionMenuBtn');
+             const actionContent = slideElement.querySelector('.actionMenuContent');
 
-            if (actionBtn && actionContent && !actionBtn.dataset.listenerAttached) {
-                let isMenuOpen = false; // Track state locally for this instance
+             if (actionBtn && actionContent && !actionBtn.dataset.listenerAttached) {
+                 let isMenuOpen = false;
 
-                const closeMenuHandler = (event) => {
-                    if (isMenuOpen && !actionContent.contains(event.target) && event.target !== actionBtn) {
-                        actionContent.classList.remove('action-menu-open');
-                        isMenuOpen = false;
-                        document.removeEventListener('click', closeMenuHandler, true);
-                    }
-                };
+                 const closeMenuHandler = (event) => {
+                     // Check if the click is outside the button AND the menu content
+                     if (isMenuOpen && !actionContent.contains(event.target) && event.target !== actionBtn) {
+                         actionContent.classList.remove('action-menu-open');
+                         isMenuOpen = false;
+                         document.removeEventListener('click', closeMenuHandler, true); // Use the stored handler
+                         delete actionBtn._closeHandler; // Clean up stored handler reference
+                     }
+                 };
 
-                const toggleMenu = (event) => {
-                    event.stopPropagation();
-                    isMenuOpen = !isMenuOpen; // Toggle state
-                    actionContent.classList.toggle('action-menu-open', isMenuOpen);
+                 const toggleMenu = (event) => {
+                     event.stopPropagation(); // Prevent click from immediately closing menu via the document listener
+                     isMenuOpen = !isMenuOpen;
+                     actionContent.classList.toggle('action-menu-open', isMenuOpen);
 
-                    // Add or remove the outside click listener based on state
-                    if (isMenuOpen) {
-                        // Use timeout to ensure it's added after the current event cycle
-                        setTimeout(() => document.addEventListener('click', closeMenuHandler, true), 0);
-                    } else {
-                        document.removeEventListener('click', closeMenuHandler, true);
-                    }
-                };
+                     if (isMenuOpen) {
+                         // Store the handler on the button element for later removal
+                         actionBtn._closeHandler = closeMenuHandler;
+                         // Use timeout to add listener after current event cycle finishes
+                         setTimeout(() => document.addEventListener('click', actionBtn._closeHandler, true), 0);
+                     } else {
+                         // Remove the specific listener instance if it exists
+                         if (actionBtn._closeHandler) {
+                             document.removeEventListener('click', actionBtn._closeHandler, true);
+                             delete actionBtn._closeHandler;
+                         }
+                     }
+                 };
 
-                actionBtn.addEventListener('click', toggleMenu);
-                actionBtn.dataset.listenerAttached = 'true';
-            }
-        }
+                 // Store the toggle handler for potential removal when slide changes
+                 actionBtn._clickHandler = toggleMenu;
+                 actionBtn.addEventListener('click', toggleMenu);
+                 actionBtn.dataset.listenerAttached = 'true'; // Mark as attached
+             }
+         }
 
 
         // --- Global Event Listeners ---
@@ -1671,7 +1685,17 @@
                 if (slideMenu.classList.contains('menu-open')) { slideMenu.classList.remove('menu-open'); }
                 // Close any open action menu on the current slide
                 const currentActionContent = slides[currentSlide].querySelector('.actionMenuContent.action-menu-open');
-                if (currentActionContent) { currentActionContent.classList.remove('action-menu-open'); }
+                 const currentActionBtn = slides[currentSlide].querySelector('.actionMenuBtn[data-listener-attached="true"]');
+                 if (currentActionContent && currentActionBtn) {
+                    currentActionContent.classList.remove('action-menu-open');
+                    // Manually trigger the cleanup normally done by clicking outside
+                    if (currentActionBtn._closeHandler) {
+                         document.removeEventListener('click', currentActionBtn._closeHandler, true);
+                         delete currentActionBtn._closeHandler;
+                         // We might need to reset the internal state variable if the menu component relies on it
+                         // This assumes initializeActionMenu correctly sets up the isMenuOpen state
+                    }
+                 }
                 // Close collapsibles
                 slides[currentSlide].querySelectorAll('.collapsible-card.expanded').forEach(c => c.classList.remove('expanded'));
                 if (currentSlide === 1) { slides[1].querySelectorAll('.agenda-item.expanded').forEach(item => item.classList.remove('expanded')); }
@@ -1684,18 +1708,21 @@
             if (slideMenu.classList.contains('menu-open') && !slideMenu.contains(e.target) && e.target !== menuToggle) {
                 slideMenu.classList.remove('menu-open');
             }
+            // Action menu closing is handled within its own initialization logic
         });
 
         // --- Initial Setup ---
-        if (typeof Chart === 'undefined') {
-            console.error("Chart.js library not loaded!");
+        if (typeof Chart === 'undefined' || typeof ChartDataLabels === 'undefined') {
+            console.error("Chart.js or ChartDataLabels library not loaded!");
             const errorDiv = document.createElement('div');
             errorDiv.textContent = 'Error: Charting library failed to load. Charts will not be displayed.';
             errorDiv.style.color = 'red'; errorDiv.style.textAlign = 'center'; errorDiv.style.padding = '20px';
             mainContentArea.prepend(errorDiv);
         } else {
-            populateMenu();
-            showSlide(0);
+            populateMenu(); // Make sure menu populates before showing slide
+             // Ensure ChartDataLabels is registered if not done globally via script tag
+             // Chart.register(ChartDataLabels); // Uncomment if needed
+            showSlide(0); // Initial slide display
         }
     });
     </script>
