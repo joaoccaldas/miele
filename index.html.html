@@ -1,0 +1,142 @@
+<!-- tablet_viewer.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Screen Viewer with AI MCQ Solver</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
+  <style>
+    body{font-family:Arial,sans-serif;margin:20px;}
+    #controls{display:flex;gap:10px;align-items:center;}
+    #outputBox{display:flex;gap:10px;margin-top:20px;}
+    .box{flex:1;border:1px solid #ccc;padding:10px;border-radius:6px;}
+    .box h3{margin:0 0 5px;font-size:1em;}
+    video{width:100%;border:1px solid #ddd;margin-top:10px;}
+    #gallery img{width:80px;cursor:pointer;border:1px solid #aaa;}
+    #status{margin-top:10px;font-weight:bold;color:#00690f;}
+    #rawBox{margin-top:20px;border:1px solid #f90;padding:10px;border-radius:6px;white-space:pre-wrap;}
+  </style>
+</head>
+<body>
+<h1>Screen Viewer with AI MCQ Solver</h1>
+
+<div id="controls">
+  Model:
+  <select id="model">
+    <option value="gpt-4o">GPT-4o</option>
+    <option value="o3">o3</option>
+    <option value="o4-mini">o4-mini</option>
+  </select>
+  <input type="password" id="apiKey" placeholder="OpenAI API Key">
+  <button id="connectBtn">Connect API</button>
+  <button id="analyzeBtn">Analyze Screenshot</button>
+  <input type="file" id="fileInput" accept="image/*">
+</div>
+<div id="status"></div>
+
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas" style="display:none;"></canvas>
+
+<div id="outputBox">
+  <div class="box"><h3>Question</h3><pre id="qBox"></pre></div>
+  <div class="box"><h3>Answer</h3><pre id="aBox"></pre></div>
+  <div class="box"><h3>Reasoning</h3><pre id="rBox"></pre></div>
+</div>
+<div id="gallery" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
+<div id="rawBox"><h3>Raw Payload</h3><pre id="rawText"></pre></div>
+
+<script>
+function setStatus(msg,ok=true){
+  const s=document.getElementById("status");
+  s.style.color = ok?"#00690f":"#b30000";
+  s.textContent = msg;
+}
+
+let apiKey="", ws, pc, lastImg;
+
+// API connect
+async function connectAPI(){
+  apiKey=document.getElementById("apiKey").value.trim();
+  if(!apiKey){ setStatus("API key missing",false); return; }
+  setStatus("Testing API...");
+  try{
+    const res=await fetch("https://api.openai.com/v1/chat/completions",{
+      method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},
+      body:JSON.stringify({model:document.getElementById("model").value,messages:[{role:"user",content:"ping"}],max_tokens:1})
+    });
+    if(!res.ok) throw new Error(res.statusText);
+    setStatus("API connected ✓");
+    document.getElementById("connectBtn").disabled=true;
+    document.getElementById("apiKey").disabled=true;
+  }catch(e){setStatus("API test failed",false);console.error(e);}
+}
+
+document.getElementById("connectBtn").onclick=connectAPI;
+
+document.getElementById("analyzeBtn").onclick=analyzeCurrent;
+document.getElementById("fileInput").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{ lastImg=r.result; addToGallery(lastImg); analyzeCurrent(); };
+  r.readAsDataURL(f);
+};
+
+// WebRTC setup
+(async()=>{
+  const SIGNAL_URL=prompt("Signaling URL:","ws://192.168.86.235:9999");
+  ws=new WebSocket(SIGNAL_URL);
+  pc=new RTCPeerConnection();
+  ws.onmessage=async e=>{
+    const msg=JSON.parse(e.data);
+    document.getElementById("rawText").textContent=JSON.stringify(msg,null,2);
+    if(msg.type==="offer"||msg.type==="answer"){
+      await pc.setRemoteDescription(msg);
+      const ans=await pc.createAnswer();await pc.setLocalDescription(ans);
+      ws.send(JSON.stringify(pc.localDescription));
+    }else if(msg.type==="candidate"){
+      await pc.addIceCandidate(msg.candidate);
+    }else if(msg.type==="annotated"){
+      document.getElementById("qBox").textContent=msg.qa.q;
+      document.getElementById("aBox").textContent=msg.qa.a;
+      document.getElementById("rBox").textContent=msg.qa.reason;
+      addToGallery(msg.img);
+    }
+  };
+  pc.onicecandidate=e=>{if(e.candidate)ws.send(JSON.stringify({type:"candidate",candidate:e.candidate}));};
+  pc.ontrack=ev=>{document.getElementById("video").srcObject=ev.streams[0];};
+  const offer=await pc.createOffer();await pc.setLocalDescription(offer);ws.send(JSON.stringify(pc.localDescription));
+})();
+
+// Gallery
+function addToGallery(dataUrl){
+  const img=document.createElement("img");img.src=dataUrl;img.style.border="1px solid #aaa";
+  img.onclick=()=>{lastImg=dataUrl;analyzeCurrent();};
+  document.getElementById("gallery").prepend(img);
+}
+
+// Analyze
+async function analyzeCurrent(){
+  if(!lastImg){alert("No image");return;}
+  if(!apiKey){setStatus("Connect API first",false);return;}
+  setStatus("Processing...");
+  try{
+    // Vision analyze
+    const payload={model:document.getElementById("model").value,messages:[
+      {role:"user",content:[{type:"image_url",image_url:{url:lastImg}},{type:"text",text:"Solve JSON: q,a,reason."}]
+      }],max_tokens:200,temperature:0.0};
+    const res=await fetch("https://api.openai.com/v1/chat/completions",{
+      method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},body:JSON.stringify(payload)
+    });
+    const data=await res.json();
+    const reply=data.choices[0].message.content;
+    const obj=JSON.parse(reply);
+    document.getElementById("qBox").textContent=obj.q;
+    document.getElementById("aBox").textContent=obj.a;
+    document.getElementById("rBox").textContent=obj.reason;
+    document.getElementById("rawText").textContent=reply;
+    setStatus("Done ✓");
+  }catch(e){setStatus("Error analyzing",false);console.error(e);}
+}
+</script>
+</body>
+</html>
